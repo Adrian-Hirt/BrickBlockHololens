@@ -2,29 +2,74 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class levelGenerator : MonoBehaviour {
-    int width = 5;
-    int height = 10;
-    float scaleFactor = 0.1f;
-
+public class LevelGenerator : MonoBehaviour
+{
+    public static LevelGenerator instance;
+    public int width = 5;
+    public int height = 10;
     public GridElement gridElement;
+    public CornerElement cornerElement;
     public GridElement[] gridElements;
+    public CornerElement[] cornerElements;
 
+    private float floorHeight = 0.25f, basementHeight;
+    void Start()
+    {
+        instance = this;
 
-    // Start is called before the first frame update
-    void Start() {
+        basementHeight = 1.5f - floorHeight / 2;
+        float elementHeight;
         gridElements = new GridElement[width * width * height];
+        cornerElements = new CornerElement[(width + 1) * (width + 1) * (height + 1)];
+        for (int y = 0; y < height + 1; y++)
+        {
+            for (int x = 0; x < width + 1; x++)
+            {
+                for (int z = 0; z < width + 1; z++)
+                {
+                    CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+                    cornerElementInstance.Initialize(x, y, z);
+                    cornerElements[x + (width + 1) * (z + (width + 1) * y)] = cornerElementInstance;
+                }
+            }
+        }
 
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
-                for(int z = 0; z < width; z++) {
-                    Vector3 coords = new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor);
-                    GridElement gridElementInstance = Instantiate(gridElement, coords, Quaternion.identity, this.transform);
-                    gridElementInstance.name = "GridElement_" + x + "_" + y + "_" + z;
-                    gridElementInstance.tag = "gridElement";
+        for (int y = 0; y < height; y++)
+        {
+            float yPos = y;
+            if (y == 0)
+            {
+                elementHeight = floorHeight;
+            }
+            else if (y == 1)
+            {
+                elementHeight = basementHeight;
+                yPos = floorHeight / 2 + basementHeight / 2;
+            }
+            else
+            {
+                elementHeight = 1;
+            }
+            for (int x = 0; x < width; x++)
+            {
+                for (int z = 0; z < width; z++)
+                {
+                    GridElement gridElementInstance = Instantiate(gridElement, new Vector3(x, yPos, z), Quaternion.identity, this.transform);
+                    gridElementInstance.Initialize(x, y, z, elementHeight);
                     gridElements[x + width * (z + width * y)] = gridElementInstance;
                 }
             }
+        }
+        Physics.SyncTransforms();
+
+        foreach (CornerElement corner in cornerElements)
+        {
+            corner.SetNearGridElements();
+        }
+        foreach (GridElement ge in gridElements)
+        {
+            ge.SetCornerPositions();
+            ge.SetEnabled();
         }
     }
 }

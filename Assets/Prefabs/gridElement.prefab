@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 3265478041730228588}
   - component: {fileID: 4386194175853649703}
   - component: {fileID: 46553009099309710}
+  - component: {fileID: 1181408611109509561}
   - component: {fileID: 6458426357670760825}
-  - component: {fileID: 8235151751892191946}
   m_Layer: 0
-  m_Name: gridElement
+  m_Name: GridElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7165963793729371580}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -83,6 +83,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1181408611109509561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7165963793729371580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec650ddbe7785a4484dc125740b0988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  corners: []
 --- !u!65 &6458426357670760825
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -96,15 +109,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8235151751892191946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7165963793729371580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbb7222cf0374eb419676e9493d24107, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

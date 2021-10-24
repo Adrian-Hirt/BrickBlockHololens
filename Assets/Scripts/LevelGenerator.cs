@@ -5,8 +5,8 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator instance;
-    public int width = 5;
-    public int height = 10;
+    public int width = 3;
+    public int height = 3;
     public GridElement gridElement;
     public CornerElement cornerElement;
     public GridElement[] gridElements;
@@ -55,6 +55,7 @@ public class LevelGenerator : MonoBehaviour
                 for (int z = 0; z < width; z++)
                 {
                     GridElement gridElementInstance = Instantiate(gridElement, new Vector3(x, yPos, z), Quaternion.identity, this.transform);
+                    gridElementInstance.tag = "gridElement";
                     gridElementInstance.Initialize(x, y, z, elementHeight);
                     gridElements[x + width * (z + width * y)] = gridElementInstance;
                 }

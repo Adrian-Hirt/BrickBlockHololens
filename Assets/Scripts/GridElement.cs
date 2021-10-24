@@ -15,7 +15,7 @@ public class GridElement : MonoBehaviour
 {
     private coord coord;
     private Collider col;
-    //private Renderer rend;
+    private Renderer rend;
     public CornerElement[] corners;
     bool isEnabled;
     private float elementHeight;
@@ -27,7 +27,7 @@ public class GridElement : MonoBehaviour
         coord = new coord(setX, setY, setZ);
         this.name = "GE_" + this.coord.x + "_" + this.coord.y + "_" + this.coord.z;
         this.col = this.GetComponent<Collider>();
-        //this.rend = this.GetComponent<Renderer>();
+        this.rend = this.GetComponent<Renderer>();
         this.elementHeight = setElementHeight;
         this.transform.localScale = new Vector3(1.0f, elementHeight, 1.0f);
         //Physics.SyncTransforms();
@@ -64,7 +64,7 @@ public class GridElement : MonoBehaviour
     public void SetEnabled()
     {
         this.col.enabled = true;
-        //this.rend.enabled = true;
+        this.rend.enabled = false;
         this.isEnabled = true;
         foreach (CornerElement ce in corners)
         {
@@ -75,7 +75,7 @@ public class GridElement : MonoBehaviour
     public void SetDisabled()
     {
         this.col.enabled = false;
-        //this.rend.enabled = false;
+        this.rend.enabled = false;
         this.isEnabled = false;
         foreach (CornerElement ce in corners)
         {

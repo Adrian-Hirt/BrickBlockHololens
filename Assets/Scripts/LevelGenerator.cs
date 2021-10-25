@@ -10,9 +10,14 @@ public class LevelGenerator : MonoBehaviour {
     public CornerElement cornerElement;
     private GridElement[,,] gridElements;
     public CornerElement[] cornerElements;
-    public static float scaleFactor = 0.2f;
+
+    // Factor with which the model should be scaled, NEEDS to be equal
+    // to the size of the LevelGenerator in Unity!
+    public static float scaleFactor = 0.1f;
+
+    // Offset of the model in x, y and z direction when initially rendered
     private int xOffset = 2;
-    private int zOffset = 2;
+    private int zOffset = -1;
     private int yOffset = -2;
 
     private float floorHeight = 0.25f, basementHeight;

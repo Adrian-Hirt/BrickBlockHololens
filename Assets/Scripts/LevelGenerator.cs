@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGenerator : MonoBehaviour
-{
+public class LevelGenerator : MonoBehaviour {
     public static LevelGenerator instance;
     public int width = 3;
     public int height = 3;
@@ -56,7 +55,7 @@ public class LevelGenerator : MonoBehaviour
                 {
                     GridElement gridElementInstance = Instantiate(gridElement, new Vector3(x, yPos, z), Quaternion.identity, this.transform);
                     gridElementInstance.tag = "gridElement";
-                    gridElementInstance.Initialize(x, y, z, elementHeight);
+                    gridElementInstance.Initialize(x, y, z, elementHeight, y == 0);
                     gridElements[x + width * (z + width * y)] = gridElementInstance;
                 }
             }

@@ -24,6 +24,9 @@ public class CursorMovement : MonoBehaviour
                     if (p.Result != null && p.Result.Details.Object != null &&
                         p.Result.Details.Object.tag == "gridElement")
                     {
+                        if(!p.Result.Details.Object.gameObject.GetComponent<GridElement>().isGroundElement) {
+                            // TODO: Disable "remove" action on ground level cubes
+                        }
                         this.transform.position = p.Result.Details.Object.transform.position;
                         this.transform.localScale = p.Result.Details.Object.transform.localScale;
                     }

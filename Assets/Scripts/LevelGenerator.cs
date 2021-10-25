@@ -55,7 +55,7 @@ public class LevelGenerator : MonoBehaviour {
                 {
                     GridElement gridElementInstance = Instantiate(gridElement, new Vector3(x, yPos, z), Quaternion.identity, this.transform);
                     gridElementInstance.tag = "gridElement";
-                    gridElementInstance.Initialize(x, y, z, elementHeight, y == 0);
+                    gridElementInstance.Initialize(x, y, z, elementHeight);
                     gridElements[x + width * (z + width * y)] = gridElementInstance;
                 }
             }

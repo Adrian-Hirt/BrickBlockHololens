@@ -21,7 +21,7 @@ public class GridElement : MonoBehaviour
     private float elementHeight;
     public bool isGroundElement;
 
-    public void Initialize(int setX, int setY, int setZ, float setElementHeight, bool isGroundElement)
+    public void Initialize(int setX, int setY, int setZ, float setElementHeight)
     {
         corners = new CornerElement[8];
 
@@ -31,7 +31,7 @@ public class GridElement : MonoBehaviour
         this.rend = this.GetComponent<Renderer>();
         this.elementHeight = setElementHeight;
         this.transform.localScale = new Vector3(1.0f, elementHeight, 1.0f);
-        this.isGroundElement = isGroundElement;
+        this.isGroundElement = setY == 0;
         //Physics.SyncTransforms();
         //setting corners
         int width = LevelGenerator.instance.width;

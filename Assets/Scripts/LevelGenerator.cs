@@ -23,6 +23,7 @@ public class LevelGenerator : MonoBehaviour {
     private float floorHeight = 0.25f, basementHeight;
     void Start()
     {
+        this.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
         instance = this;
         basementHeight = 1.5f - floorHeight / 2;
         float elementHeight;

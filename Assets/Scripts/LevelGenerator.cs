@@ -8,7 +8,7 @@ public class LevelGenerator : MonoBehaviour {
     public static int height = 5;
     public GridElement gridElement;
     public CornerElement cornerElement;
-    public GridElement[] gridElements;
+    private GridElement[,,] gridElements;
     public CornerElement[] cornerElements;
     public static float scaleFactor = 0.2f;
     private int xOffset = 2;
@@ -21,7 +21,7 @@ public class LevelGenerator : MonoBehaviour {
         instance = this;
         basementHeight = 1.5f - floorHeight / 2;
         float elementHeight;
-        gridElements = new GridElement[width * width * height];
+        gridElements = new GridElement[width, height, width]; // Access by x, y, z
         cornerElements = new CornerElement[(width + 1) * (width + 1) * (height + 1)];
         for (int y = 0; y < height + 1; y++)
         {
@@ -61,7 +61,7 @@ public class LevelGenerator : MonoBehaviour {
                     GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
                     gridElementInstance.tag = "gridElement";
                     gridElementInstance.Initialize(x, y, z, elementHeight);
-                    gridElements[x + width * (z + width * y)] = gridElementInstance;
+                    this.SetGridElement(x, y, z, gridElementInstance);
                 }
             }
         }
@@ -76,5 +76,13 @@ public class LevelGenerator : MonoBehaviour {
             ge.SetCornerPositions();
             ge.SetEnabled();
         }
+    }
+
+    public void SetGridElement(int x, int y, int z, GridElement element) {
+        gridElements[x, y, z] = element;
+    }
+
+    public GridElement GetGridElement(int x, int y, int z) {
+        return gridElements[x, y, z];
     }
 }

@@ -6,6 +6,8 @@ using Microsoft.MixedReality.Toolkit.Input;
 
 public class CursorMovement : MonoBehaviour
 {
+    public GridElement pointingAt;
+
     void Update()
     {
         foreach (var source in MixedRealityToolkit.InputSystem.DetectedInputSources)
@@ -21,10 +23,10 @@ public class CursorMovement : MonoBehaviour
                         continue;
                     }
 
-                    if (p.Result != null && p.Result.Details.Object != null &&
-                        p.Result.Details.Object.tag == "gridElement")
-                    {
-                        if(!p.Result.Details.Object.gameObject.GetComponent<GridElement>().isGroundElement) {
+                    if (p.Result != null && p.Result.Details.Object != null && p.Result.Details.Object.tag == "gridElement") {
+                        GridElement currentElement = p.Result.Details.Object.gameObject.GetComponent<GridElement>();
+
+                        if(currentElement.isGroundElement) {
                             // TODO: Disable "remove" action on ground level cubes
                         }
 
@@ -33,6 +35,7 @@ public class CursorMovement : MonoBehaviour
                             new Vector3(LevelGenerator.scaleFactor, LevelGenerator.scaleFactor, LevelGenerator.scaleFactor)
                         );
 
+                        this.pointingAt = currentElement;
                         this.transform.position = p.Result.Details.Object.transform.position;
                         this.transform.localScale = scaledScale;
                     }

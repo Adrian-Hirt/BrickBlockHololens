@@ -10,6 +10,9 @@ public class LevelGenerator : MonoBehaviour {
     public CornerElement cornerElement;
     public GridElement[] gridElements;
     public CornerElement[] cornerElements;
+    public static float scaleFactor = 0.2f;
+    private int xOffset = 2;
+    private int zOffset = 2;
 
     private float floorHeight = 0.25f, basementHeight;
     void Start()
@@ -53,7 +56,9 @@ public class LevelGenerator : MonoBehaviour {
             {
                 for (int z = 0; z < width; z++)
                 {
-                    GridElement gridElementInstance = Instantiate(gridElement, new Vector3(x, yPos, z), Quaternion.identity, this.transform);
+                    Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, yPos, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
+
+                    GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
                     gridElementInstance.tag = "gridElement";
                     gridElementInstance.Initialize(x, y, z, elementHeight);
                     gridElements[x + width * (z + width * y)] = gridElementInstance;

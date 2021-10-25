@@ -1134,8 +1134,9 @@ GameObject:
   - component: {fileID: 1367851069}
   - component: {fileID: 1367851068}
   - component: {fileID: 1367851067}
+  - component: {fileID: 1367851071}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ButtonCursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1226,6 +1227,18 @@ RectTransform:
   m_AnchoredPosition: {x: -2.988, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1367851071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367851066}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c878654d8f2f5554c80603531179b8bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1411569821
 GameObject:
   m_ObjectHideFlags: 0

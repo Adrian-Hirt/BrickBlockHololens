@@ -27,8 +27,8 @@ public class CornerElement : MonoBehaviour
     }
     public void SetNearGridElements()
     {
-        int width = LevelGenerator.instance.width;
-        int height = LevelGenerator.instance.height;
+        int width = LevelGenerator.width;
+        int height = LevelGenerator.height;
 
         if (coord.x < width && coord.y < height && coord.z < width)
         {

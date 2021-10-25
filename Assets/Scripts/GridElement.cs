@@ -34,8 +34,8 @@ public class GridElement : MonoBehaviour
         this.isGroundElement = setY == 0;
         //Physics.SyncTransforms();
         //setting corners
-        int width = LevelGenerator.instance.width;
-        int height = LevelGenerator.instance.height;
+        int width = LevelGenerator.width;
+        int height = LevelGenerator.height;
         corners[0] = LevelGenerator.instance.cornerElements[coord.x + (width + 1) * (coord.z + (width + 1) * coord.y)];
         corners[1] = LevelGenerator.instance.cornerElements[coord.x + 1 + (width + 1) * (coord.z + (width + 1) * coord.y)];
         corners[2] = LevelGenerator.instance.cornerElements[coord.x + (width + 1) * (coord.z + 1 + (width + 1) * coord.y)];
@@ -53,7 +53,7 @@ public class GridElement : MonoBehaviour
 
     public void SetCornerPositions()
     {
-        int width = LevelGenerator.instance.width;
+        int width = LevelGenerator.width;
         corners[0].SetPosition(col.bounds.min.x, col.bounds.min.y, col.bounds.min.z);
         corners[1].SetPosition(col.bounds.max.x, col.bounds.min.y, col.bounds.min.z);
         corners[2].SetPosition(col.bounds.min.x, col.bounds.min.y, col.bounds.max.z);

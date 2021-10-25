@@ -48,7 +48,7 @@ public class CornerMeshes : MonoBehaviour
             }
 
         }
-        else if (level == LevelGenerator.instance.height)
+        else if (level == LevelGenerator.height)
         {
             if (meshes.TryGetValue(2 + "_" + bitmask.ToString(), out res))
             {

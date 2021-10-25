@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.UI;
 
 public class LevelGenerator : MonoBehaviour {
     public static LevelGenerator instance;
@@ -73,12 +74,10 @@ public class LevelGenerator : MonoBehaviour {
         }
         Physics.SyncTransforms();
 
-        foreach (CornerElement corner in cornerElements)
-        {
+        foreach (CornerElement corner in cornerElements) {
             corner.SetNearGridElements();
         }
-        foreach (GridElement ge in gridElements)
-        {
+        foreach (GridElement ge in gridElements) {
             ge.SetCornerPositions();
             ge.SetEnabled();
         }
@@ -90,5 +89,14 @@ public class LevelGenerator : MonoBehaviour {
 
     public GridElement GetGridElement(int x, int y, int z) {
         return gridElements[x, y, z];
+    }
+
+    public void UpdateScale(Microsoft.MixedReality.Toolkit.UI.SliderEventData data) {
+       float newValue = data.NewValue;
+       scaleFactor = newValue;
+
+        if(scaleFactor > 0.0f) {
+            this.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+        }
     }
 }

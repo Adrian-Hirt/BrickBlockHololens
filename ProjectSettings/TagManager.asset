@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - gridElement
+  - ButtonCursor
+  - GameMenu
   layers:
   - Default
   - TransparentFX

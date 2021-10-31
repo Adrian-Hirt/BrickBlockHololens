@@ -23,10 +23,12 @@ public class CursorMovement : MonoBehaviour
                         continue;
                     }
 
-                    if (p.Result != null && p.Result.Details.Object != null && p.Result.Details.Object.tag == "gridElement") {
+                    if (p.Result != null && p.Result.Details.Object != null && p.Result.Details.Object.tag == "gridElement")
+                    {
                         GridElement currentElement = p.Result.Details.Object.gameObject.GetComponent<GridElement>();
 
-                        if(currentElement.isGroundElement) {
+                        if (currentElement.isGroundElement)
+                        {
                             // TODO: Disable "remove" action on ground level cubes
                         }
 

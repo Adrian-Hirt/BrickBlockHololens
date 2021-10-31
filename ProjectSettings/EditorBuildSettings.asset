@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/DefaultScene.unity
+    guid: 381b57d9a6c24e74aae8a0a71a38dbdf
+  - enabled: 0
+    path: Assets/Samples/Mixed Reality Toolkit Examples/2.7.2/Experimental - HandMenuLayout/Scenes/HandMenuLayoutExamples.unity
+    guid: 9e1c6bf44fb90c54dbf82acf2808c16f
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 677a470b124043641be99c6f0a15c83c, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 9b6dbc81524d52248ac13457954bc84d, type: 2}

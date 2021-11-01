@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
 
-public class LevelGenerator : MonoBehaviour {
+public class LevelGenerator : MonoBehaviour
+{
     public static LevelGenerator instance;
     public static int width = 5;
     public static int height = 5;
@@ -37,6 +38,7 @@ public class LevelGenerator : MonoBehaviour {
                 for (int z = 0; z < width + 1; z++)
                 {
                     CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+                    cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
                     cornerElementInstance.Initialize(x, y, z);
                     cornerElements[x + (width + 1) * (z + (width + 1) * y)] = cornerElementInstance;
                 }
@@ -66,6 +68,7 @@ public class LevelGenerator : MonoBehaviour {
                     Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, yPos + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
 
                     GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
+                    gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
                     gridElementInstance.tag = "gridElement";
                     gridElementInstance.Initialize(x, y, z, elementHeight);
                     this.SetGridElement(x, y, z, gridElementInstance);
@@ -74,28 +77,34 @@ public class LevelGenerator : MonoBehaviour {
         }
         Physics.SyncTransforms();
 
-        foreach (CornerElement corner in cornerElements) {
+        foreach (CornerElement corner in cornerElements)
+        {
             corner.SetNearGridElements();
         }
-        foreach (GridElement ge in gridElements) {
+        foreach (GridElement ge in gridElements)
+        {
             ge.SetCornerPositions();
             ge.SetEnabled();
         }
     }
 
-    public void SetGridElement(int x, int y, int z, GridElement element) {
+    public void SetGridElement(int x, int y, int z, GridElement element)
+    {
         gridElements[x, y, z] = element;
     }
 
-    public GridElement GetGridElement(int x, int y, int z) {
+    public GridElement GetGridElement(int x, int y, int z)
+    {
         return gridElements[x, y, z];
     }
 
-    public void UpdateScale(Microsoft.MixedReality.Toolkit.UI.SliderEventData data) {
-       float newValue = data.NewValue;
-       scaleFactor = newValue;
+    public void UpdateScale(Microsoft.MixedReality.Toolkit.UI.SliderEventData data)
+    {
+        float newValue = data.NewValue;
+        scaleFactor = newValue;
 
-        if(scaleFactor > 0.0f) {
+        if (scaleFactor > 0.0f)
+        {
             this.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
         }
     }

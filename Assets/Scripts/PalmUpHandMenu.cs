@@ -11,7 +11,7 @@ public class PalmUpHandMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        editMode = EditMode.LeftRightHand;
     }
 
     // Update is called once per frame

@@ -2173,7 +2173,7 @@ MonoBehaviour:
   isGlobal: 0
   Dimensions: 2
   dimensionIndex: 0
-  startDimensionIndex: 0
+  startDimensionIndex: 1
   CanSelect: 1
   CanDeselect: 1
   VoiceCommand: Select

@@ -25,63 +25,52 @@ public class CornerElement : MonoBehaviour
         bitMaskValue = BitMask.GetBitMask(nearGridElements);
         mesh.mesh = CornerMeshes.instance.GetCornerMesh(bitMaskValue, coord.y);
     }
+
     public void SetNearGridElements()
     {
         int width = LevelGenerator.width;
         int height = LevelGenerator.height;
+        int length = LevelGenerator.length;
 
-        // gridElements[x + width * (z + width * y)] = gridElementInstance;
-
-        if (coord.x < width && coord.y < height && coord.z < width)
-        {
+        if (coord.x < width && coord.y < height && coord.z < length){
             //UpperNorthEast
             nearGridElements[0] = LevelGenerator.instance.GetGridElement(coord.x, coord.y, coord.z);
-            // nearGridElements[0] = LevelGenerator.instance.gridElements[coord.x + width * (coord.z + width * coord.y)];
         }
-        if (coord.x > 0 && coord.y < height & coord.z < width)
-        {
+
+        if (coord.x > 0 && coord.y < height & coord.z < length) {
             //UpperNorthWest
             nearGridElements[1] = LevelGenerator.instance.GetGridElement(coord.x - 1, coord.y, coord.z);
-            // nearGridElements[1] = LevelGenerator.instance.gridElements[coord.x - 1 + width * (coord.z + width * coord.y)];
         }
-        if (coord.x > 0 && coord.y < height & coord.z > 0)
-        {
+
+        if (coord.x > 0 && coord.y < height & coord.z > 0) {
             //UpperSouthWest
             nearGridElements[2] = LevelGenerator.instance.GetGridElement(coord.x - 1, coord.y, coord.z - 1);
-            // nearGridElements[2] = LevelGenerator.instance.gridElements[coord.x - 1 + width * (coord.z - 1 + width * coord.y)];
         }
-        if (coord.x < width && coord.y < height && coord.z > 0)
-        {
+
+        if (coord.x < width && coord.y < height && coord.z > 0) {
             //UpperSouthEast
             nearGridElements[3] = LevelGenerator.instance.GetGridElement(coord.x, coord.y, coord.z - 1);
-            // nearGridElements[3] = LevelGenerator.instance.gridElements[coord.x + width * (coord.z - 1 + width * coord.y)];
         }
 
-        if (coord.x < width && coord.y > 0 && coord.z < width)
-        {
+        if (coord.x < width && coord.y > 0 && coord.z < length) {
             //LowerNorthEast
             nearGridElements[4] = LevelGenerator.instance.GetGridElement(coord.x, coord.y - 1, coord.z);
-            // nearGridElements[4] = LevelGenerator.instance.gridElements[coord.x + width * (coord.z + width * (coord.y - 1))];
         }
-        if (coord.x > 0 && coord.y > 0 & coord.z < width)
-        {
+
+        if (coord.x > 0 && coord.y > 0 & coord.z < length) {
             //LowerNorthWest
             nearGridElements[5] = LevelGenerator.instance.GetGridElement(coord.x - 1, coord.y - 1, coord.z);
-            // nearGridElements[5] = LevelGenerator.instance.gridElements[coord.x - 1 + width * (coord.z + width * (coord.y - 1))];
         }
-        if (coord.x > 0 && coord.y > 0 & coord.z > 0)
-        {
+
+        if (coord.x > 0 && coord.y > 0 & coord.z > 0) {
             //LowerSouthWest
             nearGridElements[6] = LevelGenerator.instance.GetGridElement(coord.x - 1, coord.y - 1, coord.z - 1);
-            // nearGridElements[6] = LevelGenerator.instance.gridElements[coord.x - 1 + width * (coord.z - 1 + width * (coord.y - 1))];
         }
-        if (coord.x < width && coord.y > 0 && coord.z > 0)
-        {
+
+        if (coord.x < width && coord.y > 0 && coord.z > 0) {
             //LowerSouthEast
             nearGridElements[7] = LevelGenerator.instance.GetGridElement(coord.x, coord.y - 1, coord.z - 1);
-            // nearGridElements[7] = LevelGenerator.instance.gridElements[coord.x + width * (coord.z - 1 + width * (coord.y - 1))];
         }
         SetCornerElement();
-
     }
 }

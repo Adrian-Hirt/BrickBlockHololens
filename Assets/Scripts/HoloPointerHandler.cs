@@ -30,29 +30,22 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
     {
         bool deleteMode;
         PalmUpHandMenu palmMenu = GameObject.FindGameObjectWithTag("GameMenu").GetComponent<PalmUpHandMenu>();
-        if (palmMenu.editMode == PalmUpHandMenu.EditMode.LeftRightHand)
-        {
+        if (palmMenu.editMode == PalmUpHandMenu.EditMode.LeftRightHand) {
             deleteMode = eventData.Handedness == Microsoft.MixedReality.Toolkit.Utilities.Handedness.Left;
         }
-        else
-        {
+        else {
             deleteMode = palmMenu.deleteMode;
         }
 
-        if (!eventData.used)
-        {
+        if (!eventData.used) {
             // Get grid element we're currently pointing at
             GridElement pointingAt = this.transform.parent.gameObject.GetComponent<CursorMovement>().pointingAt;
 
-            if (deleteMode)
-            {
+            if (deleteMode) {
                 pointingAt.SetDisabled();
             }
-            else
-            {
+            else {
                 coord coord = pointingAt.GetCoord();
-                int height = LevelGenerator.height;
-                int width = LevelGenerator.width;
 
                 GridElement otherElement;
 

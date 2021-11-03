@@ -50,10 +50,7 @@ public class LevelGenerator : MonoBehaviour
         for (int y = 0; y < height + 1; y++) {
             for (int x = 0; x < width + 1; x++) {
                 for (int z = 0; z < length + 1; z++) {
-                    CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
-                    cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                    cornerElementInstance.Initialize(x, y, z);
-                    this.SetCornerElement(x, y, z, cornerElementInstance);
+                    this.CreateAndSetCornerElement(x, y, z);
                 }
             }
         }
@@ -72,13 +69,7 @@ public class LevelGenerator : MonoBehaviour
             }
             for (int x = 0; x < width; x++) {
                 for (int z = 0; z < length; z++) {
-                    Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, yPos + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
-
-                    GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
-                    gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                    gridElementInstance.tag = "gridElement";
-                    gridElementInstance.Initialize(x, y, z, elementHeight);
-                    this.SetGridElement(x, y, z, gridElementInstance);
+                    this.CreateAndSetGridElement(x, y, z, elementHeight);
                 }
             }
         }
@@ -166,10 +157,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int y = 0; y < currentHeightHigh + 1; y++) {
             for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
-                CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
-                cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                cornerElementInstance.Initialize(cornerElementX, y, z);
-                this.SetCornerElement(cornerElementX, y, z, cornerElementInstance);
+                this.CreateAndSetCornerElement(cornerElementX, y, z);
             }
         }
 
@@ -186,13 +174,7 @@ public class LevelGenerator : MonoBehaviour
                 elementHeight = 1;
             }
             for (int z = currentLengthLow; z < currentLengthHigh; z++) {
-                Vector3 scaledPosition = Vector3.Scale(new Vector3(gridElementX + xOffset, yPos + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
-
-                GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
-                gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                gridElementInstance.tag = "gridElement";
-                gridElementInstance.Initialize(gridElementX, y, z, elementHeight);
-                this.SetGridElement(gridElementX, y, z, gridElementInstance);
+                this.CreateAndSetGridElement(gridElementX, y, z, elementHeight);
             }
         }
 
@@ -242,10 +224,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int y = 0; y < currentHeightHigh + 1; y++) {
             for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
-                CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
-                cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                cornerElementInstance.Initialize(x, y, cornerElementZ);
-                this.SetCornerElement(x, y, cornerElementZ, cornerElementInstance);
+                this.CreateAndSetCornerElement(x, y, cornerElementZ);
             }
         }
 
@@ -262,13 +241,7 @@ public class LevelGenerator : MonoBehaviour
                 elementHeight = 1;
             }
             for (int x = currentWidthLow; x < currentWidthHigh; x++) {
-                Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, yPos + yOffset, gridElementZ + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
-
-                GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
-                gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                gridElementInstance.tag = "gridElement";
-                gridElementInstance.Initialize(x, y, gridElementZ, elementHeight);
-                this.SetGridElement(x, y, gridElementZ, gridElementInstance);
+                this.CreateAndSetGridElement(x, y, gridElementZ, elementHeight);
             }
         }
 
@@ -311,22 +284,13 @@ public class LevelGenerator : MonoBehaviour
 
         for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
             for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
-                CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
-                cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                cornerElementInstance.Initialize(x, cornerElementY, z);
-                this.SetCornerElement(x, cornerElementY, z, cornerElementInstance);
+                this.CreateAndSetCornerElement(x, cornerElementY, z);
             }
         }
 
         for (int z = currentLengthLow; z < currentLengthHigh; z++) {
             for (int x = currentWidthLow; x < currentWidthHigh; x++) {
-                Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, gridElementY + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
-
-                GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
-                gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
-                gridElementInstance.tag = "gridElement";
-                gridElementInstance.Initialize(x, gridElementY, z, 1);
-                this.SetGridElement(x, gridElementY, z, gridElementInstance);
+                this.CreateAndSetGridElement(x, gridElementY, z, 1);
             }
         }
 
@@ -346,5 +310,21 @@ public class LevelGenerator : MonoBehaviour
                 ge.SetDisabled();
             }
         }
+    }
+
+    private void CreateAndSetCornerElement(int x, int y, int z) {
+        CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+        cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+        cornerElementInstance.Initialize(x, y, z);
+        this.SetCornerElement(x, y, z, cornerElementInstance);
+    }
+
+    private void CreateAndSetGridElement(int x, int y, int z, float elementHeight) {
+        Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, y + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
+        GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
+        gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+        gridElementInstance.tag = "gridElement";
+        gridElementInstance.Initialize(x, y, z, elementHeight);
+        this.SetGridElement(x, y, z, gridElementInstance);
     }
 }

@@ -10,8 +10,8 @@ public class LevelGenerator : MonoBehaviour
     public static int height = 5; // Y direction
     public static int length = 3; // Z direction
 
-    public static int currentCornerElementMinX, currentCornerElementMaxX;
-    public static int currentCornerElementMinZ, currentCornerElementMaxZ;
+    public static int currentWidthLow, currentWidthHigh;
+    public static int currentLengthLow, currentLengthHigh;
 
     public GridElement gridElement;
     public CornerElement cornerElement;
@@ -37,14 +37,11 @@ public class LevelGenerator : MonoBehaviour
         basementHeight = 1.5f - floorHeight / 2;
         float elementHeight;
 
-        currentCornerElementMinX = 0;
-        currentCornerElementMaxX = width;
+        currentWidthLow = 0;
+        currentWidthHigh = width;
 
-        currentCornerElementMinZ = 0;
-        currentCornerElementMaxZ = length;
-
-        Debug.Log(currentCornerElementMinZ);
-        Debug.Log(currentCornerElementMaxZ);
+        currentLengthLow = 0;
+        currentLengthHigh = length;
 
         for (int y = 0; y < height + 1; y++) {
             for (int x = 0; x < width + 1; x++) {
@@ -149,22 +146,22 @@ public class LevelGenerator : MonoBehaviour
         int otherCornerElementX;
 
         if(negativeX) {
-            currentCornerElementMinX -= 1;
-            gridElementX = currentCornerElementMinX;
-            cornerElementX = currentCornerElementMinX;
+            currentWidthLow -= 1;
+            gridElementX = currentWidthLow;
+            cornerElementX = currentWidthLow;
             otherCornerElementX = gridElementX + 1;
         }
         else {
-            gridElementX = currentCornerElementMaxX;
-            otherCornerElementX = currentCornerElementMaxX;
-            currentCornerElementMaxX += 1;
-            cornerElementX = currentCornerElementMaxX;
+            gridElementX = currentWidthHigh;
+            otherCornerElementX = currentWidthHigh;
+            currentWidthHigh += 1;
+            cornerElementX = currentWidthHigh;
         }
 
         float elementHeight;
 
         for (int y = 0; y < height + 1; y++) {
-            for (int z = 0; z < length + 1; z++) {
+            for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
                 CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
                 cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
                 cornerElementInstance.Initialize(cornerElementX, y, z);
@@ -184,7 +181,7 @@ public class LevelGenerator : MonoBehaviour
             else {
                 elementHeight = 1;
             }
-            for (int z = 0; z < length; z++) {
+            for (int z = currentLengthLow; z < currentLengthHigh; z++) {
                 Vector3 scaledPosition = Vector3.Scale(new Vector3(gridElementX + xOffset, yPos + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
 
                 GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
@@ -198,14 +195,14 @@ public class LevelGenerator : MonoBehaviour
         Physics.SyncTransforms();
 
         for (int y = 0; y < height + 1; y++) {
-            for (int z = 0; z < length + 1; z++) {
+            for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
                 this.GetCornerElement(cornerElementX, y, z).SetNearGridElements();
                 this.GetCornerElement(otherCornerElementX, y, z).SetNearGridElements();
             }
         } 
 
         for (int y = 0; y < height; y++) {
-            for (int z = 0; z < length; z++) {
+            for (int z = currentLengthLow; z < currentLengthHigh; z++) {
                 GridElement ge = this.GetGridElement(gridElementX, y, z);
                 ge.SetCornerPositions();
 
@@ -225,22 +222,22 @@ public class LevelGenerator : MonoBehaviour
         int otherCornerElementZ;
 
         if(negativeZ) {
-            currentCornerElementMinZ -= 1;
-            gridElementZ = currentCornerElementMinZ;
-            cornerElementZ = currentCornerElementMinZ;
+            currentLengthLow -= 1;
+            gridElementZ = currentLengthLow;
+            cornerElementZ = currentLengthLow;
             otherCornerElementZ = gridElementZ + 1;
         }
         else {
-            gridElementZ = currentCornerElementMaxZ;
-            otherCornerElementZ = currentCornerElementMaxZ;
-            currentCornerElementMaxZ += 1;
-            cornerElementZ = currentCornerElementMaxZ;
+            gridElementZ = currentLengthHigh;
+            otherCornerElementZ = currentLengthHigh;
+            currentLengthHigh += 1;
+            cornerElementZ = currentLengthHigh;
         }
 
         float elementHeight;
 
         for (int y = 0; y < height + 1; y++) {
-            for (int x = 0; x < width + 1; x++) {
+            for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
                 CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
                 cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
                 cornerElementInstance.Initialize(x, y, cornerElementZ);
@@ -260,7 +257,7 @@ public class LevelGenerator : MonoBehaviour
             else {
                 elementHeight = 1;
             }
-            for (int x = 0; x < width; x++) {
+            for (int x = currentWidthLow; x < currentWidthHigh; x++) {
                 Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, yPos + yOffset, gridElementZ + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
 
                 GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
@@ -274,15 +271,14 @@ public class LevelGenerator : MonoBehaviour
         Physics.SyncTransforms();
 
         for (int y = 0; y < height + 1; y++) {
-            for (int x = 0; x < width + 1; x++) {
+            for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
                 this.GetCornerElement(x, y, cornerElementZ).SetNearGridElements();
                 this.GetCornerElement(x, y, otherCornerElementZ).SetNearGridElements();
             }
         } 
 
         for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                // Debug.Log(x + "-" + y + "-" + gridElementZ);
+            for (int x = currentWidthLow; x < currentWidthHigh; x++) {
                 GridElement ge = this.GetGridElement(x, y, gridElementZ);
                 ge.SetCornerPositions();
 

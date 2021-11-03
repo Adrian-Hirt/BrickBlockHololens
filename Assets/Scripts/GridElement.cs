@@ -76,16 +76,16 @@ public class GridElement : MonoBehaviour
     public void SetTapEnabled() {
         this.SetEnabled();
 
-        if(this.coord.x == LevelGenerator.currentCornerElementMinX) {
+        if(this.coord.x == LevelGenerator.currentWidthLow) {
             LevelGenerator.instance.AddShellInDirectionX(true);
         }
-        else if (this.coord.x == LevelGenerator.currentCornerElementMaxX - 1) {
+        else if (this.coord.x == LevelGenerator.currentWidthHigh - 1) {
             LevelGenerator.instance.AddShellInDirectionX(false);
         }
-        else if(this.coord.z == LevelGenerator.currentCornerElementMinZ) {
+        else if(this.coord.z == LevelGenerator.currentLengthLow) {
             LevelGenerator.instance.AddShellInDirectionZ(true);
         }
-        else if (this.coord.z == LevelGenerator.currentCornerElementMaxZ - 1) {
+        else if (this.coord.z == LevelGenerator.currentLengthHigh - 1) {
             LevelGenerator.instance.AddShellInDirectionZ(false);
         }
     }

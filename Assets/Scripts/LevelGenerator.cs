@@ -10,7 +10,7 @@ public class LevelGenerator : MonoBehaviour
     public static int height = 5; // Y direction
     public static int length = 3; // Z direction
 
-    public static int currentMinX, currentMaxX;
+    public static int currentCornerElementMinX, currentCornerElementMaxX;
 
     public GridElement gridElement;
     public CornerElement cornerElement;
@@ -36,8 +36,8 @@ public class LevelGenerator : MonoBehaviour
         basementHeight = 1.5f - floorHeight / 2;
         float elementHeight;
 
-        currentMinX = 0;
-        currentMaxX = width;
+        currentCornerElementMinX = 0;
+        currentCornerElementMaxX = width;
 
         for (int y = 0; y < height + 1; y++) {
             for (int x = 0; x < width + 1; x++) {
@@ -142,16 +142,16 @@ public class LevelGenerator : MonoBehaviour
         int otherCornerElementX;
 
         if(negativeX) {
-            currentMinX -= 1;
-            gridElementX = currentMinX;
-            cornerElementX = currentMinX;
+            currentCornerElementMinX -= 1;
+            gridElementX = currentCornerElementMinX;
+            cornerElementX = currentCornerElementMinX;
             otherCornerElementX = gridElementX + 1;
         }
         else {
-            gridElementX = currentMaxX;
-            currentMaxX += 1;
-            cornerElementX = currentMaxX;
-            otherCornerElementX = gridElementX;
+            gridElementX = currentCornerElementMaxX;
+            otherCornerElementX = currentCornerElementMaxX;
+            currentCornerElementMaxX += 1;
+            cornerElementX = currentCornerElementMaxX;
         }
 
         float elementHeight;

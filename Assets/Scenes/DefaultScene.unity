@@ -5101,7 +5101,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridElement: {fileID: 1181408611109509561, guid: eb6a40585c8f70c4c91649148cb46ff1, type: 3}
   cornerElement: {fileID: 4683593060159177323, guid: 7b6acfe4527aa4f4889700d116855e74, type: 3}
-  cornerElements: []
 --- !u!4 &1411569823
 Transform:
   m_ObjectHideFlags: 0

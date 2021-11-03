@@ -88,6 +88,12 @@ public class GridElement : MonoBehaviour
         else if (this.coord.z == LevelGenerator.currentLengthHigh - 1) {
             LevelGenerator.instance.AddShellInDirectionZ(false);
         }
+        else if(this.coord.y == LevelGenerator.currentHeightLow) {
+            // Do nothing, as we don't build "down" into the floor
+        }
+        else if (this.coord.y == LevelGenerator.currentHeightHigh - 1) {
+            LevelGenerator.instance.AddShellInDirectionY();
+        }
     }
 
     public void SetDisabled()

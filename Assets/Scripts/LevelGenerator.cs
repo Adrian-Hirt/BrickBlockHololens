@@ -12,6 +12,7 @@ public class LevelGenerator : MonoBehaviour
 
     public static int currentWidthLow, currentWidthHigh;
     public static int currentLengthLow, currentLengthHigh;
+    public static int currentHeightLow, currentHeightHigh;
 
     public GridElement gridElement;
     public CornerElement cornerElement;
@@ -42,6 +43,9 @@ public class LevelGenerator : MonoBehaviour
 
         currentLengthLow = 0;
         currentLengthHigh = length;
+
+        currentHeightLow = 0;
+        currentHeightHigh = height;
 
         for (int y = 0; y < height + 1; y++) {
             for (int x = 0; x < width + 1; x++) {
@@ -160,7 +164,7 @@ public class LevelGenerator : MonoBehaviour
 
         float elementHeight;
 
-        for (int y = 0; y < height + 1; y++) {
+        for (int y = 0; y < currentHeightHigh + 1; y++) {
             for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
                 CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
                 cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
@@ -169,7 +173,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y < currentHeightHigh; y++) {
             float yPos = y;
             if (y == 0) {
                 elementHeight = floorHeight;
@@ -194,14 +198,14 @@ public class LevelGenerator : MonoBehaviour
 
         Physics.SyncTransforms();
 
-        for (int y = 0; y < height + 1; y++) {
+        for (int y = 0; y < currentHeightHigh + 1; y++) {
             for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
                 this.GetCornerElement(cornerElementX, y, z).SetNearGridElements();
                 this.GetCornerElement(otherCornerElementX, y, z).SetNearGridElements();
             }
         } 
 
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y < currentHeightHigh; y++) {
             for (int z = currentLengthLow; z < currentLengthHigh; z++) {
                 GridElement ge = this.GetGridElement(gridElementX, y, z);
                 ge.SetCornerPositions();
@@ -236,7 +240,7 @@ public class LevelGenerator : MonoBehaviour
 
         float elementHeight;
 
-        for (int y = 0; y < height + 1; y++) {
+        for (int y = 0; y < currentHeightHigh + 1; y++) {
             for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
                 CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
                 cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
@@ -245,7 +249,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y < currentHeightHigh; y++) {
             float yPos = y;
             if (y == 0) {
                 elementHeight = floorHeight;
@@ -270,14 +274,14 @@ public class LevelGenerator : MonoBehaviour
 
         Physics.SyncTransforms();
 
-        for (int y = 0; y < height + 1; y++) {
+        for (int y = 0; y < currentHeightHigh + 1; y++) {
             for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
                 this.GetCornerElement(x, y, cornerElementZ).SetNearGridElements();
                 this.GetCornerElement(x, y, otherCornerElementZ).SetNearGridElements();
             }
         } 
 
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y < currentHeightHigh; y++) {
             for (int x = currentWidthLow; x < currentWidthHigh; x++) {
                 GridElement ge = this.GetGridElement(x, y, gridElementZ);
                 ge.SetCornerPositions();
@@ -288,6 +292,58 @@ public class LevelGenerator : MonoBehaviour
                 else {
                     ge.SetEnabled();
                 }
+            }
+        }
+    }
+
+    public void AddShellInDirectionY() {
+        int cornerElementY;
+        int gridElementY;
+        int otherCornerElementY;
+
+
+        gridElementY = currentHeightHigh;
+        otherCornerElementY = currentHeightHigh;
+        currentHeightHigh += 1;
+        cornerElementY = currentHeightHigh;
+
+        float elementHeight;
+
+        for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
+            for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
+                CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+                cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+                cornerElementInstance.Initialize(x, cornerElementY, z);
+                this.SetCornerElement(x, cornerElementY, z, cornerElementInstance);
+            }
+        }
+
+        for (int z = currentLengthLow; z < currentLengthHigh; z++) {
+            for (int x = currentWidthLow; x < currentWidthHigh; x++) {
+                Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, gridElementY + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
+
+                GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
+                gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+                gridElementInstance.tag = "gridElement";
+                gridElementInstance.Initialize(x, gridElementY, z, 1);
+                this.SetGridElement(x, gridElementY, z, gridElementInstance);
+            }
+        }
+
+        Physics.SyncTransforms();
+
+        for (int z = currentLengthLow; z < currentLengthHigh + 1; z++) {
+            for (int x = currentWidthLow; x < currentWidthHigh + 1; x++) {
+                this.GetCornerElement(x, cornerElementY, z).SetNearGridElements();
+                this.GetCornerElement(x, otherCornerElementY, z).SetNearGridElements();
+            }
+        } 
+
+        for (int z = currentLengthLow; z < currentLengthHigh; z++) {
+            for (int x = currentWidthLow; x < currentWidthHigh; x++) {
+                GridElement ge = this.GetGridElement(x, gridElementY, z);
+                ge.SetCornerPositions();
+                ge.SetDisabled();
             }
         }
     }

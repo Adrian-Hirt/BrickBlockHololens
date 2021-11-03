@@ -28,26 +28,22 @@ public class CornerElement : MonoBehaviour
 
     public void SetNearGridElements()
     {
-        int width = LevelGenerator.width;
-        int height = LevelGenerator.height;
-        int length = LevelGenerator.length;
-
-        if (coord.x < LevelGenerator.currentWidthHigh && coord.y < height && coord.z < LevelGenerator.currentLengthHigh){
+        if (coord.x < LevelGenerator.currentWidthHigh && coord.y <  LevelGenerator.currentHeightHigh && coord.z < LevelGenerator.currentLengthHigh){
             //UpperNorthEast
             nearGridElements[0] = LevelGenerator.instance.GetGridElement(coord.x, coord.y, coord.z);
         }
 
-        if (coord.x > LevelGenerator.currentWidthLow && coord.y < height & coord.z < LevelGenerator.currentLengthHigh) {
+        if (coord.x > LevelGenerator.currentWidthLow && coord.y <  LevelGenerator.currentHeightHigh & coord.z < LevelGenerator.currentLengthHigh) {
             //UpperNorthWest
             nearGridElements[1] = LevelGenerator.instance.GetGridElement(coord.x - 1, coord.y, coord.z);
         }
 
-        if (coord.x > LevelGenerator.currentWidthLow && coord.y < height & coord.z > LevelGenerator.currentLengthLow) {
+        if (coord.x > LevelGenerator.currentWidthLow && coord.y <  LevelGenerator.currentHeightHigh & coord.z > LevelGenerator.currentLengthLow) {
             //UpperSouthWest
             nearGridElements[2] = LevelGenerator.instance.GetGridElement(coord.x - 1, coord.y, coord.z - 1);
         }
 
-        if (coord.x < LevelGenerator.currentWidthHigh && coord.y < height && coord.z > LevelGenerator.currentLengthLow) {
+        if (coord.x < LevelGenerator.currentWidthHigh && coord.y <  LevelGenerator.currentHeightHigh && coord.z > LevelGenerator.currentLengthLow) {
             //UpperSouthEast
             nearGridElements[3] = LevelGenerator.instance.GetGridElement(coord.x, coord.y, coord.z - 1);
         }

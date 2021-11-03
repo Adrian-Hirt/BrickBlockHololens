@@ -10,6 +10,8 @@ public class LevelGenerator : MonoBehaviour
     public static int height = 5; // Y direction
     public static int length = 3; // Z direction
 
+    public static int currentMinX, currentMaxX;
+
     public GridElement gridElement;
     public CornerElement cornerElement;
 
@@ -33,6 +35,9 @@ public class LevelGenerator : MonoBehaviour
         instance = this;
         basementHeight = 1.5f - floorHeight / 2;
         float elementHeight;
+
+        currentMinX = 0;
+        currentMaxX = width;
 
         for (int y = 0; y < height + 1; y++) {
             for (int x = 0; x < width + 1; x++) {
@@ -129,5 +134,82 @@ public class LevelGenerator : MonoBehaviour
     public CornerElement GetCornerElement(int x, int y, int z) {
         string key = this.CoordinatesToDictkey(x, y, z);
         return cornerElementsDict[key];
+    }
+
+    public void AddShellInDirectionX(bool negativeX) {
+        int cornerElementX;
+        int gridElementX;
+        int otherCornerElementX;
+
+        if(negativeX) {
+            currentMinX -= 1;
+            gridElementX = currentMinX;
+            cornerElementX = currentMinX;
+            otherCornerElementX = gridElementX + 1;
+        }
+        else {
+            gridElementX = currentMaxX;
+            currentMaxX += 1;
+            cornerElementX = currentMaxX;
+            otherCornerElementX = gridElementX;
+        }
+
+        float elementHeight;
+
+        for (int y = 0; y < height + 1; y++) {
+            for (int z = 0; z < length + 1; z++) {
+                CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+                cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+                cornerElementInstance.Initialize(cornerElementX, y, z);
+                this.SetCornerElement(cornerElementX, y, z, cornerElementInstance);
+            }
+        }
+
+        for (int y = 0; y < height; y++) {
+            float yPos = y;
+            if (y == 0) {
+                elementHeight = floorHeight;
+            }
+            else if (y == 1) {
+                elementHeight = basementHeight;
+                yPos = floorHeight / 2 + basementHeight / 2;
+            }
+            else {
+                elementHeight = 1;
+            }
+            for (int z = 0; z < length; z++) {
+                Debug.Log(gridElementX + "-" + y + "-" + z);
+                Vector3 scaledPosition = Vector3.Scale(new Vector3(gridElementX + xOffset, yPos + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
+
+                GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
+                gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+                gridElementInstance.tag = "gridElement";
+                gridElementInstance.Initialize(gridElementX, y, z, elementHeight);
+                this.SetGridElement(gridElementX, y, z, gridElementInstance);
+            }
+        }
+
+        Physics.SyncTransforms();
+
+        for (int y = 0; y < height + 1; y++) {
+            for (int z = 0; z < length + 1; z++) {
+                this.GetCornerElement(cornerElementX, y, z).SetNearGridElements();
+                this.GetCornerElement(otherCornerElementX, y, z).SetNearGridElements();
+            }
+        } 
+
+        for (int y = 0; y < height; y++) {
+            for (int z = 0; z < length; z++) {
+                GridElement ge = this.GetGridElement(gridElementX, y, z);
+                ge.SetCornerPositions();
+
+                if(y != 0) {
+                    ge.SetDisabled();
+                }
+                else {
+                    ge.SetEnabled();
+                }
+            }
+        }
     }
 }

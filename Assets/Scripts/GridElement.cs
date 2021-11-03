@@ -61,6 +61,7 @@ public class GridElement : MonoBehaviour
         corners[6].SetPosition(col.bounds.min.x, col.bounds.max.y, col.bounds.max.z);
         corners[7].SetPosition(col.bounds.max.x, col.bounds.max.y, col.bounds.max.z);
     }
+
     public void SetEnabled()
     {
         this.col.enabled = true;
@@ -69,6 +70,17 @@ public class GridElement : MonoBehaviour
         foreach (CornerElement ce in corners)
         {
             ce.SetCornerElement();
+        }
+    }
+
+    public void SetTapEnabled() {
+        this.SetEnabled();
+
+        if(this.coord.x == LevelGenerator.currentMinX) {
+            LevelGenerator.instance.AddShellInDirectionX(true);
+        }
+        else if (this.coord.x == LevelGenerator.currentMaxX - 1) {
+            LevelGenerator.instance.AddShellInDirectionX(false);
         }
     }
 

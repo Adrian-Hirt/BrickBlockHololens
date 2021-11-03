@@ -82,7 +82,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
                 }
 
                 // Use null-safe operator
-                otherElement?.SetEnabled();
+                otherElement?.SetTapEnabled();
             }
             eventData.Use();
         }

@@ -82,6 +82,12 @@ public class GridElement : MonoBehaviour
         else if (this.coord.x == LevelGenerator.currentCornerElementMaxX - 1) {
             LevelGenerator.instance.AddShellInDirectionX(false);
         }
+        else if(this.coord.z == LevelGenerator.currentCornerElementMinZ) {
+            LevelGenerator.instance.AddShellInDirectionZ(true);
+        }
+        else if (this.coord.z == LevelGenerator.currentCornerElementMaxZ - 1) {
+            LevelGenerator.instance.AddShellInDirectionZ(false);
+        }
     }
 
     public void SetDisabled()

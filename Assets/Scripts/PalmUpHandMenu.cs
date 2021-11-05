@@ -27,13 +27,22 @@ public class PalmUpHandMenu : MonoBehaviour
 
     public void SetEditMode()
     {
-        if (destroyToggleButton.GetComponent<Interactable>().IsToggled)
+        switch (gameMode)
         {
-            editMode = EditMode.Destroy;
-        }
-        else
-        {
-            editMode = EditMode.Build;
+            case GameMode.BuildDestroyButtonMode:
+                if (destroyToggleButton.GetComponent<Interactable>().IsToggled)
+                {
+                    editMode = EditMode.Destroy;
+                }
+                else
+                {
+                    editMode = EditMode.Build;
+                }
+                
+                break;
+            case GameMode.MultiSelectMode:
+                MultiSelectionHandler.instance.RemoveSelectedElements();
+                break;
         }
     }
 
@@ -58,7 +67,7 @@ public class PalmUpHandMenu : MonoBehaviour
                 buttonCursor.SetActive(false);
                 break;
             case GameMode.MultiSelectMode:
-                destroyToggleButton.SetActive(false);
+                destroyToggleButton.SetActive(true);
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(false);
                 break;

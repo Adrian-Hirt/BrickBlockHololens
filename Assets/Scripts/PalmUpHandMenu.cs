@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PalmUpHandMenu : MonoBehaviour
 {
-    public enum GameMode { LeftRightHandEditMode = 0, BuildDestroyButtonMode = 1, MoveMode = 2 };
+    public enum GameMode { LeftRightHandEditMode = 0, BuildDestroyButtonMode = 1, MoveMode = 2, MultiSelectMode = 3 };
     public GameMode gameMode;
 
     // BuildDestroyButtonMode states
@@ -55,6 +55,11 @@ public class PalmUpHandMenu : MonoBehaviour
             case GameMode.MoveMode:
                 destroyToggleButton.SetActive(false);
                 SetObjectManipulators(true);
+                buttonCursor.SetActive(false);
+                break;
+            case GameMode.MultiSelectMode:
+                destroyToggleButton.SetActive(false);
+                SetObjectManipulators(false);
                 buttonCursor.SetActive(false);
                 break;
         }

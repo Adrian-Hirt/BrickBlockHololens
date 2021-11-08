@@ -48,6 +48,8 @@ public class PalmUpHandMenu : MonoBehaviour
 
     public void SetGameMode()
     {
+        MultiSelectionHandler.instance.ResetSelection();
+        
         gameMode = (GameMode)gameModeRadialSet.GetComponent<InteractableToggleCollection>().CurrentIndex;
         switch (gameMode)
         {

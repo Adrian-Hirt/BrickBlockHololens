@@ -86,6 +86,23 @@ public class MultiSelectionHandler : MonoBehaviour
         }
     }
 
+    public void ResetSelection()
+    {
+        if (defaultMaterial == null)
+            return;
+        
+        foreach (GridElement gridElement in selectedGridElements)
+        {
+            // Restore default material
+            foreach (CornerElement cornerElement in gridElement.corners)
+            {
+                cornerElement.gameObject.GetComponent<Renderer>().material = defaultMaterial;
+            }
+        }
+
+        selectedGridElements.Clear();
+    }
+    
     public void RemoveSelectedElements()
     {
         foreach (GridElement gridElement in selectedGridElements)

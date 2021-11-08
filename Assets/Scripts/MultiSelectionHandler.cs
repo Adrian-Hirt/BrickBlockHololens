@@ -29,6 +29,10 @@ public class MultiSelectionHandler : MonoBehaviour
             {
                 GridElement gridElement = hitCollider.gameObject.GetComponent<GridElement>();
 
+                // Ignore collisions with non grid elements
+                if (gridElement == null)
+                    return;
+
                 // Save default material so we can restore it
                 if (defaultMaterial == null)
                 {

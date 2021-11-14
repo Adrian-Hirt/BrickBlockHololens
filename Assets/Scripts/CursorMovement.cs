@@ -38,8 +38,8 @@ public class CursorMovement : MonoBehaviour
                         );
 
                         this.pointingAt = currentElement;
-                        this.transform.position = p.Result.Details.Object.transform.position;
-                        this.transform.localScale = scaledScale;
+                        this.transform.localPosition = currentElement.transform.localPosition;
+                        this.transform.localScale = currentElement.transform.localScale;
                     }
                 }
             }

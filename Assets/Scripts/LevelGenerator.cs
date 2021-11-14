@@ -314,7 +314,6 @@ public class LevelGenerator : MonoBehaviour
                 {
                     ge.SetEnabled();
                 }
-                Debug.Log(ge.transform.position);
             }
         }
     }
@@ -372,7 +371,6 @@ public class LevelGenerator : MonoBehaviour
     private void CreateAndSetCornerElement(int x, int y, int z)
     {
         CornerElement cornerElementInstance = Instantiate(cornerElement, this.transform, false);
-        cornerElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
         cornerElementInstance.Initialize(x, y, z);
         this.SetCornerElement(x, y, z, cornerElementInstance);
     }

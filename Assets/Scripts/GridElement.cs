@@ -109,6 +109,7 @@ public class GridElement : MonoBehaviour
 
     public void SetDisabled()
     {
+        if (coord.y == 0) { return; }
         this.col.enabled = false;
         this.rend.enabled = false;
         this.isEnabled = false;

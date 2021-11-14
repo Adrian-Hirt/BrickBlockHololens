@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Input;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -23,13 +24,15 @@ public class LevelGenerator : MonoBehaviour
     private Dictionary<string, CornerElement> cornerElementsDict;
 
     private float floorHeight = 0.25f, basementHeight;
-
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         gridElements = new Dictionary<string, GridElement>();
         cornerElementsDict = new Dictionary<string, CornerElement>();
 
-        instance = this;
         basementHeight = 1.5f - floorHeight / 2;
         float elementHeight;
 
@@ -137,7 +140,14 @@ public class LevelGenerator : MonoBehaviour
     public GridElement GetGridElement(int x, int y, int z)
     {
         string key = this.CoordinatesToDictkey(x, y, z);
-        return gridElements[key];
+        try
+        {
+            return gridElements[key];
+        }
+        catch (System.SystemException)
+        {
+            return null;
+        }
     }
 
     public void SetCornerElement(int x, int y, int z, CornerElement element)
@@ -381,6 +391,9 @@ public class LevelGenerator : MonoBehaviour
         gridElementInstance.transform.localPosition = new Vector3(x, y, z);
 
         gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+        PalmUpHandMenu.instance.ObjectManipulatorsActive();
+        gridElementInstance.GetComponent<ObjectManipulator>().enabled = PalmUpHandMenu.instance.ObjectManipulatorsActive();
+        gridElementInstance.GetComponent<NearInteractionGrabbable>().enabled = PalmUpHandMenu.instance.ObjectManipulatorsActive();
         gridElementInstance.tag = "gridElement";
         gridElementInstance.Initialize(x, y, z, elementHeight);
         this.SetGridElement(x, y, z, gridElementInstance);

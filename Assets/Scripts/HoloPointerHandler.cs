@@ -29,14 +29,13 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
     void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData)
     {
         bool deleteMode = false;
-        PalmUpHandMenu palmMenu = GameObject.FindGameObjectWithTag("GameMenu").GetComponent<PalmUpHandMenu>();
-        switch (palmMenu.gameMode)
+        switch (PalmUpHandMenu.instance.gameMode)
         {
             case PalmUpHandMenu.GameMode.LeftRightHandEditMode:
                 deleteMode = eventData.Handedness == Microsoft.MixedReality.Toolkit.Utilities.Handedness.Left;
                 break;
             case PalmUpHandMenu.GameMode.BuildDestroyButtonMode:
-                deleteMode = palmMenu.editMode == PalmUpHandMenu.EditMode.Destroy;
+                deleteMode = PalmUpHandMenu.instance.editMode == PalmUpHandMenu.EditMode.Destroy;
                 break;
             case PalmUpHandMenu.GameMode.MoveMode:
                 return;

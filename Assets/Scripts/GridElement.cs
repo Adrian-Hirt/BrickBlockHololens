@@ -32,7 +32,6 @@ public class GridElement : MonoBehaviour
         this.elementHeight = setElementHeight;
         this.transform.localScale = new Vector3(1.0f, elementHeight, 1.0f);
         this.isGroundElement = setY == 0;
-        //Physics.SyncTransforms();
         //setting corners
 
         corners[0] = LevelGenerator.instance.GetCornerElement(coord.x, coord.y, coord.z);
@@ -52,14 +51,19 @@ public class GridElement : MonoBehaviour
 
     public void SetCornerPositions()
     {
-        corners[0].SetPosition(col.bounds.min.x, col.bounds.min.y, col.bounds.min.z);
-        corners[1].SetPosition(col.bounds.max.x, col.bounds.min.y, col.bounds.min.z);
-        corners[2].SetPosition(col.bounds.min.x, col.bounds.min.y, col.bounds.max.z);
-        corners[3].SetPosition(col.bounds.max.x, col.bounds.min.y, col.bounds.max.z);
-        corners[4].SetPosition(col.bounds.min.x, col.bounds.max.y, col.bounds.min.z);
-        corners[5].SetPosition(col.bounds.max.x, col.bounds.max.y, col.bounds.min.z);
-        corners[6].SetPosition(col.bounds.min.x, col.bounds.max.y, col.bounds.max.z);
-        corners[7].SetPosition(col.bounds.max.x, col.bounds.max.y, col.bounds.max.z);
+        Vector3 position = this.transform.localPosition;
+        float x = coord.x;
+        float y = coord.y;
+        float z = coord.z;
+        float f = 0.5F;
+        corners[0].SetPosition(x - f, y - f * elementHeight, z - f);
+        corners[1].SetPosition(x + f, y - f * elementHeight, z - f);
+        corners[2].SetPosition(x - f, y - f * elementHeight, z + f);
+        corners[3].SetPosition(x + f, y - f * elementHeight, z + f);
+        corners[4].SetPosition(x - f, y + f * elementHeight, z - f);
+        corners[5].SetPosition(x + f, y + f * elementHeight, z - f);
+        corners[6].SetPosition(x - f, y + f * elementHeight, z + f);
+        corners[7].SetPosition(x + f, y + f * elementHeight, z + f);
     }
 
     public void SetEnabled()
@@ -73,31 +77,39 @@ public class GridElement : MonoBehaviour
         }
     }
 
-    public void SetTapEnabled() {
+    public void SetTapEnabled()
+    {
         this.SetEnabled();
 
-        if(this.coord.x == LevelGenerator.currentWidthLow) {
+        if (this.coord.x == LevelGenerator.currentWidthLow)
+        {
             LevelGenerator.instance.AddShellInDirectionX(true);
         }
-        else if (this.coord.x == LevelGenerator.currentWidthHigh - 1) {
+        else if (this.coord.x == LevelGenerator.currentWidthHigh - 1)
+        {
             LevelGenerator.instance.AddShellInDirectionX(false);
         }
-        else if(this.coord.z == LevelGenerator.currentLengthLow) {
+        else if (this.coord.z == LevelGenerator.currentLengthLow)
+        {
             LevelGenerator.instance.AddShellInDirectionZ(true);
         }
-        else if (this.coord.z == LevelGenerator.currentLengthHigh - 1) {
+        else if (this.coord.z == LevelGenerator.currentLengthHigh - 1)
+        {
             LevelGenerator.instance.AddShellInDirectionZ(false);
         }
-        else if(this.coord.y == LevelGenerator.currentHeightLow) {
+        else if (this.coord.y == LevelGenerator.currentHeightLow)
+        {
             // Do nothing, as we don't build "down" into the floor
         }
-        else if (this.coord.y == LevelGenerator.currentHeightHigh - 1) {
+        else if (this.coord.y == LevelGenerator.currentHeightHigh - 1)
+        {
             LevelGenerator.instance.AddShellInDirectionY();
         }
     }
 
     public void SetDisabled()
     {
+        if (coord.y == 0) { return; }
         this.col.enabled = false;
         this.rend.enabled = false;
         this.isEnabled = false;

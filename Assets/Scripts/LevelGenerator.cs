@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Input;
 
 public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator instance;
-    public static int width = 5; // X Direction
-    public static int height = 5; // Y direction
+    public static int width = 3; // X Direction
+    public static int height = 3; // Y direction
     public static int length = 3; // Z direction
 
     public static int currentWidthLow, currentWidthHigh;
@@ -19,23 +20,19 @@ public class LevelGenerator : MonoBehaviour
 
     public static float scaleFactor = 0.1f;
 
-    // Offset of the model in x, y and z direction when initially rendered
-    private int xOffset = 2;
-    private int zOffset = -1;
-    private int yOffset = -2;
-
     private Dictionary<string, GridElement> gridElements;
     private Dictionary<string, CornerElement> cornerElementsDict;
 
     private float floorHeight = 0.25f, basementHeight;
-
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         gridElements = new Dictionary<string, GridElement>();
         cornerElementsDict = new Dictionary<string, CornerElement>();
 
-        this.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
-        instance = this;
         basementHeight = 1.5f - floorHeight / 2;
         float elementHeight;
 
@@ -61,7 +58,6 @@ public class LevelGenerator : MonoBehaviour
 
         for (int y = 0; y < height; y++)
         {
-            float yPos = y;
             if (y == 0)
             {
                 elementHeight = floorHeight;
@@ -69,7 +65,6 @@ public class LevelGenerator : MonoBehaviour
             else if (y == 1)
             {
                 elementHeight = basementHeight;
-                yPos = floorHeight / 2 + basementHeight / 2;
             }
             else
             {
@@ -145,7 +140,14 @@ public class LevelGenerator : MonoBehaviour
     public GridElement GetGridElement(int x, int y, int z)
     {
         string key = this.CoordinatesToDictkey(x, y, z);
-        return gridElements[key];
+        try
+        {
+            return gridElements[key];
+        }
+        catch (System.SystemException)
+        {
+            return null;
+        }
     }
 
     public void SetCornerElement(int x, int y, int z, CornerElement element)
@@ -338,8 +340,6 @@ public class LevelGenerator : MonoBehaviour
         currentHeightHigh += 1;
         cornerElementY = currentHeightHigh;
 
-        float elementHeight;
-
         for (int z = currentLengthLow; z < currentLengthHigh + 1; z++)
         {
             for (int x = currentWidthLow; x < currentWidthHigh + 1; x++)
@@ -380,16 +380,20 @@ public class LevelGenerator : MonoBehaviour
 
     private void CreateAndSetCornerElement(int x, int y, int z)
     {
-        CornerElement cornerElementInstance = Instantiate(cornerElement, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+        CornerElement cornerElementInstance = Instantiate(cornerElement, this.transform, false);
         cornerElementInstance.Initialize(x, y, z);
         this.SetCornerElement(x, y, z, cornerElementInstance);
     }
 
     private void CreateAndSetGridElement(int x, int y, int z, float elementHeight)
     {
-        Vector3 scaledPosition = Vector3.Scale(new Vector3(x + xOffset, y + yOffset, z + zOffset), new Vector3(scaleFactor, scaleFactor, scaleFactor));
-        GridElement gridElementInstance = Instantiate(gridElement, scaledPosition, Quaternion.identity, this.transform);
+        GridElement gridElementInstance = Instantiate(gridElement, this.transform, false);
+        gridElementInstance.transform.localPosition = new Vector3(x, y, z);
+
         gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;
+        PalmUpHandMenu.instance.ObjectManipulatorsActive();
+        gridElementInstance.GetComponent<ObjectManipulator>().enabled = PalmUpHandMenu.instance.ObjectManipulatorsActive();
+        gridElementInstance.GetComponent<NearInteractionGrabbable>().enabled = PalmUpHandMenu.instance.ObjectManipulatorsActive();
         gridElementInstance.tag = "gridElement";
         gridElementInstance.Initialize(x, y, z, elementHeight);
         this.SetGridElement(x, y, z, gridElementInstance);

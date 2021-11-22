@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6949845680482015238}
   - component: {fileID: 8651450963076705467}
   - component: {fileID: 4683593060159177323}
-  - component: {fileID: 6662193011245015426}
   m_Layer: 0
   m_Name: CornerElement
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6225800731720064191}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.132555, y: 0.8484206, z: 1.6349792}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -97,19 +96,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nearGridElements: []
   bitMaskValue: 0
---- !u!54 &6662193011245015426
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6225800731720064191}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0

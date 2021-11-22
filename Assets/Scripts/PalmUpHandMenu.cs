@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
 using UnityEngine;
 
 public class PalmUpHandMenu : MonoBehaviour
 {
-    public enum GameMode { LeftRightHandEditMode = 0, BuildDestroyButtonMode = 1, MoveMode = 2, MultiSelectMode = 3 };
+    public static PalmUpHandMenu instance;
+    public enum GameMode { LeftRightHandEditMode = 0, BuildDestroyButtonMode = 1, MoveMode = 2, MultiSelectMode = 3, ColliderMode = 4 };
     public GameMode gameMode;
 
     // BuildDestroyButtonMode states
@@ -17,13 +19,18 @@ public class PalmUpHandMenu : MonoBehaviour
     public GameObject gameModeRadialSet;
     public GameObject buttonCursor;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
         gameMode = GameMode.LeftRightHandEditMode;
         SetObjectManipulators(false);
     }
-
 
     public void SetEditMode()
     {
@@ -38,7 +45,7 @@ public class PalmUpHandMenu : MonoBehaviour
                 {
                     editMode = EditMode.Build;
                 }
-                
+
                 break;
             case GameMode.MultiSelectMode:
                 MultiSelectionHandler.instance.RemoveSelectedElements();
@@ -49,7 +56,7 @@ public class PalmUpHandMenu : MonoBehaviour
     public void SetGameMode()
     {
         MultiSelectionHandler.instance.ResetSelection();
-        
+
         gameMode = (GameMode)gameModeRadialSet.GetComponent<InteractableToggleCollection>().CurrentIndex;
         switch (gameMode)
         {
@@ -73,7 +80,16 @@ public class PalmUpHandMenu : MonoBehaviour
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(false);
                 break;
+            case GameMode.ColliderMode:
+                destroyToggleButton.SetActive(false);
+                SetObjectManipulators(false);
+                buttonCursor.SetActive(false);
+                break;
         }
+    }
+    public bool ObjectManipulatorsActive()
+    {
+        return gameMode == GameMode.MoveMode;
     }
     private void SetObjectManipulators(bool active)
     {
@@ -82,5 +98,10 @@ public class PalmUpHandMenu : MonoBehaviour
         {
             om.enabled = active;
         }
+        foreach (NearInteractionGrabbable grabbable in level.GetComponentsInChildren<NearInteractionGrabbable>())
+        {
+            grabbable.enabled = active;
+        }
     }
+
 }

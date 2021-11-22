@@ -7,14 +7,12 @@ using UnityEngine;
 public class MultiSelectionHandler : MonoBehaviour
 {
     public static MultiSelectionHandler instance;
-    private PalmUpHandMenu palmMenu;
     private List<GridElement> selectedGridElements = new List<GridElement>();
     private Material selectionMaterial;
     private Material defaultMaterial;
 
     private void Start()
     {
-        palmMenu = GameObject.FindGameObjectWithTag("GameMenu").GetComponent<PalmUpHandMenu>();
         selectionMaterial = Resources.Load<Material>("Selected");
         instance = this;
     }
@@ -72,7 +70,7 @@ public class MultiSelectionHandler : MonoBehaviour
     private void Update()
     {
         // Do nothing if not in multi select mode
-        if (palmMenu.gameMode != PalmUpHandMenu.GameMode.MultiSelectMode)
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.MultiSelectMode)
             return;
 
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Right, out MixedRealityPose poseRight))
@@ -90,7 +88,7 @@ public class MultiSelectionHandler : MonoBehaviour
     {
         if (defaultMaterial == null)
             return;
-        
+
         foreach (GridElement gridElement in selectedGridElements)
         {
             // Restore default material
@@ -102,7 +100,7 @@ public class MultiSelectionHandler : MonoBehaviour
 
         selectedGridElements.Clear();
     }
-    
+
     public void RemoveSelectedElements()
     {
         foreach (GridElement gridElement in selectedGridElements)

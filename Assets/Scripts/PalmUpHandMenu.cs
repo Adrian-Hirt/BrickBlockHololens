@@ -9,11 +9,11 @@ using UnityEngine;
 public class PalmUpHandMenu : MonoBehaviour
 {
     public static PalmUpHandMenu instance;
-    public enum GameMode { LeftRightHandEditMode = 0, BuildDestroyButtonMode = 1, MoveMode = 2, MultiSelectMode = 3, ColliderMode = 4 };
+    public enum GameMode { PointerMode = 0, ColliderMode = 1, MoveScaleMode = 2, MultiSelectMode = 3, };
     public GameMode gameMode;
 
     // BuildDestroyButtonMode states
-    public enum EditMode { Build = 0, Destroy = 1 };
+    public enum EditMode { Build = 0, Destroy = 1, LeftRightHand = 2 };
     public EditMode editMode;
 
     public GameObject level;
@@ -30,15 +30,20 @@ public class PalmUpHandMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameMode = GameMode.LeftRightHandEditMode;
+        gameMode = GameMode.PointerMode;
+        editMode = EditMode.LeftRightHand;
         SetObjectManipulators(false);
+        destroyToggleButton.SetActive(false);
     }
 
     public void SetEditMode()
     {
         switch (gameMode)
         {
-            case GameMode.BuildDestroyButtonMode:
+            case GameMode.MultiSelectMode:
+                MultiSelectionHandler.instance.RemoveSelectedElements();
+                break;
+            default:
                 if (destroyToggleButton.GetComponent<Interactable>().IsToggled)
                 {
                     editMode = EditMode.Destroy;
@@ -47,10 +52,6 @@ public class PalmUpHandMenu : MonoBehaviour
                 {
                     editMode = EditMode.Build;
                 }
-
-                break;
-            case GameMode.MultiSelectMode:
-                MultiSelectionHandler.instance.RemoveSelectedElements();
                 break;
         }
     }
@@ -62,36 +63,40 @@ public class PalmUpHandMenu : MonoBehaviour
         gameMode = (GameMode)gameModeRadialSet.GetComponent<InteractableToggleCollection>().CurrentIndex;
         switch (gameMode)
         {
-            case GameMode.LeftRightHandEditMode:
-                destroyToggleButton.SetActive(false);
+            case GameMode.PointerMode:
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(true);
                 break;
-            case GameMode.BuildDestroyButtonMode:
-                destroyToggleButton.SetActive(true);
-                SetObjectManipulators(false);
-                buttonCursor.SetActive(true);
-                break;
-            case GameMode.MoveMode:
-                destroyToggleButton.SetActive(false);
+            case GameMode.MoveScaleMode:
                 SetObjectManipulators(true);
                 buttonCursor.SetActive(false);
                 break;
             case GameMode.MultiSelectMode:
-                destroyToggleButton.SetActive(true);
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(false);
                 break;
             case GameMode.ColliderMode:
-                destroyToggleButton.SetActive(false);
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(false);
                 break;
         }
     }
+    public void SetUseDestroyButton()
+    {
+        if (editMode == EditMode.LeftRightHand)
+        {
+            editMode = EditMode.Build;
+            destroyToggleButton.SetActive(true);
+        }
+        else
+        {
+            editMode = EditMode.LeftRightHand;
+            destroyToggleButton.SetActive(false);
+        }
+    }
     public bool ObjectManipulatorsActive()
     {
-        return gameMode == GameMode.MoveMode;
+        return gameMode == GameMode.MoveScaleMode;
     }
     private void SetObjectManipulators(bool active)
     {

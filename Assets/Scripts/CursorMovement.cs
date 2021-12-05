@@ -1,48 +1,72 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.Utilities;
 
 public class CursorMovement : MonoBehaviour
 {
     public GridElement pointingAt;
+    private Boolean visible = true;
+    
+    private void Show()
+    {
+        if (visible)
+        {
+            return;
+        }
+        
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+        
+        visible = true;
+    }
 
+    private void Hide()
+    {
+        if (!visible)
+        {
+            return;
+        }
+        
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        visible = false;
+    }
+    
     void Update()
     {
-        foreach (var source in MixedRealityToolkit.InputSystem.DetectedInputSources)
+        ShellHandRayPointer pointer = PointerUtils.GetPointer<ShellHandRayPointer>(Handedness.Any);
+        
+        if (pointer != null && pointer.Result != null && pointer.Result.CurrentPointerTarget != null && pointer.Result.CurrentPointerTarget.CompareTag("gridElement"))
         {
-            // Ignore anything that is not a hand because we want articulated hands
-            if (source.SourceType == Microsoft.MixedReality.Toolkit.Input.InputSourceType.Hand)
+            Show();
+            GridElement currentElement = pointer.Result.CurrentPointerTarget.GetComponent<GridElement>();
+
+            if (currentElement.isGroundElement)
             {
-                foreach (var p in source.Pointers)
-                {
-                    if (!(p is Microsoft.MixedReality.Toolkit.Input.ShellHandRayPointer))
-                    {
-                        // We only want the Microsoft.MixedReality.Toolkit.Input.ShellHandRayPointer
-                        continue;
-                    }
-
-                    if (p.Result != null && p.Result.Details.Object != null && p.Result.Details.Object.tag == "gridElement")
-                    {
-                        GridElement currentElement = p.Result.Details.Object.gameObject.GetComponent<GridElement>();
-
-                        if (currentElement.isGroundElement)
-                        {
-                            // TODO: Disable "remove" action on ground level cubes
-                        }
-
-                        Vector3 scaledScale = Vector3.Scale(
-                            p.Result.Details.Object.transform.localScale,
-                            new Vector3(LevelGenerator.scaleFactor, LevelGenerator.scaleFactor, LevelGenerator.scaleFactor)
-                        );
-
-                        this.pointingAt = currentElement;
-                        this.transform.localPosition = currentElement.transform.localPosition;
-                        this.transform.localScale = currentElement.transform.localScale;
-                    }
-                }
+                return;
             }
+
+            Transform elementTransform = currentElement.transform;
+            
+            pointingAt = currentElement;
+            transform.localPosition = elementTransform.localPosition;
+            transform.localScale = elementTransform.localScale;
+            
+            return;
+        }
+
+        if (pointer != null && pointer.Result != null && pointer.Result.CurrentPointerTarget == null)
+        {
+            Hide();
         }
     }
 }

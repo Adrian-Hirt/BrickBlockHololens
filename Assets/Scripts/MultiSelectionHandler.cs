@@ -13,7 +13,7 @@ public class MultiSelectionHandler : MonoBehaviour
 
     private void Start()
     {
-        selectionMaterial = Resources.Load<Material>("Selected");
+        selectionMaterial = Resources.Load<Material>("Selected_Delete");
         instance = this;
     }
 

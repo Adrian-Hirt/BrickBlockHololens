@@ -31,6 +31,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
         bool deleteMode = false;
         switch (PalmUpHandMenu.instance.gameMode)
         {
+            case PalmUpHandMenu.GameMode.CopyPasteMode:
             case PalmUpHandMenu.GameMode.PointerMode:
                 if (PalmUpHandMenu.instance.editMode == PalmUpHandMenu.EditMode.LeftRightHand)
                 {
@@ -50,6 +51,21 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
             // Get grid element we're currently pointing at
             GridElement pointingAt = this.transform.parent.gameObject.GetComponent<CursorMovement>().pointingAt;
 
+            if (PalmUpHandMenu.instance.gameMode == PalmUpHandMenu.GameMode.CopyPasteMode)
+            {
+                if (deleteMode)
+                {
+                    CopyPasteHandler.instance.DeselectGridElement(pointingAt);
+                }
+                else
+                {
+                    CopyPasteHandler.instance.SelectGridElement(pointingAt);
+                }
+
+                eventData.Use();
+                return;
+            }
+            
             if (deleteMode)
             {
                 pointingAt.SetDisabled();

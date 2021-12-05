@@ -9,7 +9,7 @@ using UnityEngine;
 public class PalmUpHandMenu : MonoBehaviour
 {
     public static PalmUpHandMenu instance;
-    public enum GameMode { PointerMode = 0, ColliderMode = 1, MoveScaleMode = 2, MultiSelectMode = 3, };
+    public enum GameMode { PointerMode = 0, ColliderMode = 1, MoveScaleMode = 2, MultiSelectMode = 3, CopyPasteMode = 4 };
     public GameMode gameMode;
 
     // BuildDestroyButtonMode states
@@ -59,6 +59,7 @@ public class PalmUpHandMenu : MonoBehaviour
     public void SetGameMode()
     {
         MultiSelectionHandler.instance.ResetSelection();
+        CopyPasteHandler.instance.ResetSelection();
 
         gameMode = (GameMode)gameModeRadialSet.GetComponent<InteractableToggleCollection>().CurrentIndex;
         switch (gameMode)
@@ -74,6 +75,10 @@ public class PalmUpHandMenu : MonoBehaviour
             case GameMode.MultiSelectMode:
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(false);
+                break;
+            case GameMode.CopyPasteMode:
+                SetObjectManipulators(false);
+                buttonCursor.SetActive(true);
                 break;
             case GameMode.ColliderMode:
                 SetObjectManipulators(false);

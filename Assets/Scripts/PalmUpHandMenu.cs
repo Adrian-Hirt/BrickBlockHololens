@@ -99,6 +99,10 @@ public class PalmUpHandMenu : MonoBehaviour
             destroyToggleButton.SetActive(false);
         }
     }
+    public void SetMesh()
+    {
+        CornerMeshes.instance.UpdateMesh();
+    }
     public bool ObjectManipulatorsActive()
     {
         return gameMode == GameMode.MoveScaleMode;

@@ -6,17 +6,27 @@ public class CornerMeshes : MonoBehaviour
 {
     public static CornerMeshes instance;
     private Dictionary<string, Mesh> meshes;
-    public GameObject mesh;
+    public GameObject defaultMesh;
+    public GameObject simpleMesh;
+    
+    public enum MeshTypes
+    {
+        Default,
+        Simple
+    }
+    private MeshTypes currMesh;
+
     void Awake()
     {
         instance = this;
         meshes = new Dictionary<string, Mesh>();
+        currMesh = MeshTypes.Default;
         Initialize();
     }
 
     private void Initialize()
     {
-        foreach (Transform child in mesh.transform)
+        foreach (Transform child in defaultMesh.transform)
         {
             meshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
         }
@@ -57,5 +67,28 @@ public class CornerMeshes : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void UpdateMesh()
+    {
+        meshes.Clear();
+
+        switch (currMesh)
+        {
+            case MeshTypes.Default:
+                foreach (Transform child in simpleMesh.transform)
+                {
+                    meshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
+                }
+                currMesh = MeshTypes.Simple;
+                break;
+            case MeshTypes.Simple:
+                foreach (Transform child in defaultMesh.transform)
+                {
+                    meshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
+                }
+                currMesh = MeshTypes.Default;
+                break;
+        }
     }
 }

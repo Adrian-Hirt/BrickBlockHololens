@@ -9,7 +9,6 @@ public class MultiSelectionHandler : MonoBehaviour
     public static MultiSelectionHandler instance;
     private List<GridElement> selectedGridElements = new List<GridElement>();
     private Material selectionMaterial;
-    private Material defaultMaterial;
 
     private void Start()
     {
@@ -31,37 +30,17 @@ public class MultiSelectionHandler : MonoBehaviour
                 if (!gridElement)
                     continue;
 
-                // Save default material so we can restore it
-                if (defaultMaterial == null)
-                {
-                    defaultMaterial = gridElement.gameObject.GetComponent<Renderer>().material;
-                }
-
                 // Do not select ground elements
                 if (gridElement.isGroundElement)
                     return;
 
                 if (handedness == Handedness.Right)
                 {
-                    // Change material of selected elements
-                    foreach (CornerElement cornerElement in gridElement.corners)
-                    {
-                        cornerElement.gameObject.GetComponent<Renderer>().material = selectionMaterial;
-                    }
-
-                    // Keep track of selected grid elements
-                    selectedGridElements.Add(gridElement);
+                    SelectGridElement(gridElement);
                 }
                 else
                 {
-                    // Change material of selected elements
-                    foreach (CornerElement cornerElement in gridElement.corners)
-                    {
-                        cornerElement.gameObject.GetComponent<Renderer>().material = defaultMaterial;
-                    }
-
-                    // Keep track of selected grid elements
-                    selectedGridElements.Remove(gridElement);
+                    DeselectGridElement(gridElement);
                 }
             }
         }
@@ -84,33 +63,37 @@ public class MultiSelectionHandler : MonoBehaviour
         }
     }
 
+    public void SelectGridElement(GridElement element)
+    {
+        Renderer rend = element.GetComponent<Renderer>();
+        rend.enabled = true;
+        rend.material = selectionMaterial;
+
+        selectedGridElements.Add(element);
+    }
+    
     public void ResetSelection()
     {
-        if (defaultMaterial == null)
-            return;
-
         foreach (GridElement gridElement in selectedGridElements)
         {
-            // Restore default material
-            foreach (CornerElement cornerElement in gridElement.corners)
-            {
-                cornerElement.gameObject.GetComponent<Renderer>().material = defaultMaterial;
-            }
+            DeselectGridElement(gridElement);
         }
 
         selectedGridElements.Clear();
     }
 
+    public void DeselectGridElement(GridElement element)
+    {
+        Renderer rend = element.GetComponent<Renderer>();
+        rend.enabled = false;
+        rend.material = null;
+    }
+    
     public void RemoveSelectedElements()
     {
         foreach (GridElement gridElement in selectedGridElements)
         {
-            // Restore default material
-            foreach (CornerElement cornerElement in gridElement.corners)
-            {
-                cornerElement.gameObject.GetComponent<Renderer>().material = defaultMaterial;
-            }
-
+            DeselectGridElement(gridElement);
             gridElement.SetDisabled();
         }
 

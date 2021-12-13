@@ -21,7 +21,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
 
     void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
     {
-        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.CopyPasteMode)
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.ExtrusionMode)
         {
             return;
         }
@@ -35,7 +35,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
 
     void IMixedRealityPointerHandler.OnPointerDragged(MixedRealityPointerEventData eventData)
     {
-        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.CopyPasteMode)
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.ExtrusionMode)
         {
             return;
         }
@@ -45,12 +45,12 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
         ShellHandRayPointer pointer = (ShellHandRayPointer) eventData.Pointer;
         Vector3 dragDiff = (dragStart - pointer.transform.position).Mul(new Vector3(10, 10, 10));
 
-        CopyPasteHandler.instance.Drag(dragDiff);
+        ExtrusionHandler.instance.Drag(dragDiff);
     }
     
     void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData)
     {
-        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.CopyPasteMode)
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.ExtrusionMode)
         {
             return;
         }
@@ -59,7 +59,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
         Vector3 dragDiff = (dragStart - pointer.transform.position).Mul(new Vector3(10, 10, 10));
         if (Math.Abs(dragDiff.x) >= 1 || Math.Abs(dragDiff.y) >= 1 || Math.Abs(dragDiff.z) >= 1)
         {
-            CopyPasteHandler.instance.ResetSelection();
+            ExtrusionHandler.instance.ResetSelection();
         }
     }
 
@@ -68,7 +68,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
         bool deleteMode = false;
         switch (PalmUpHandMenu.instance.gameMode)
         {
-            case PalmUpHandMenu.GameMode.CopyPasteMode:
+            case PalmUpHandMenu.GameMode.ExtrusionMode:
             case PalmUpHandMenu.GameMode.PointerMode:
                 if (PalmUpHandMenu.instance.editMode == PalmUpHandMenu.EditMode.LeftRightHand)
                 {
@@ -89,15 +89,15 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
             // Get grid element we're currently pointing at
             GridElement pointingAt = this.transform.parent.gameObject.GetComponent<CursorMovement>().pointingAt;
 
-            if (PalmUpHandMenu.instance.gameMode == PalmUpHandMenu.GameMode.CopyPasteMode)
+            if (PalmUpHandMenu.instance.gameMode == PalmUpHandMenu.GameMode.ExtrusionMode)
             {
                 if (deleteMode)
                 {
-                    CopyPasteHandler.instance.DeselectGridElement(pointingAt);
+                    ExtrusionHandler.instance.DeselectGridElement(pointingAt);
                 }
                 else
                 {
-                    CopyPasteHandler.instance.SelectGridElement(pointingAt);
+                    ExtrusionHandler.instance.SelectGridElement(pointingAt);
                 }
 
                 eventData.Use();

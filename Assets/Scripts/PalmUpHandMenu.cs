@@ -9,7 +9,7 @@ using UnityEngine;
 public class PalmUpHandMenu : MonoBehaviour
 {
     public static PalmUpHandMenu instance;
-    public enum GameMode { PointerMode = 0, ColliderMode = 1, MoveScaleMode = 2, MultiSelectMode = 3, CopyPasteMode = 4 };
+    public enum GameMode { PointerMode = 0, ColliderMode = 1, MoveScaleMode = 2, MultiDeleteMode = 3, ExtrusionMode = 4 };
     public GameMode gameMode;
 
     // BuildDestroyButtonMode states
@@ -40,8 +40,8 @@ public class PalmUpHandMenu : MonoBehaviour
     {
         switch (gameMode)
         {
-            case GameMode.MultiSelectMode:
-                MultiSelectionHandler.instance.RemoveSelectedElements();
+            case GameMode.MultiDeleteMode:
+                MultiDeleteHandler.instance.RemoveSelectedElements();
                 break;
             default:
                 if (destroyToggleButton.GetComponent<Interactable>().IsToggled)
@@ -58,8 +58,8 @@ public class PalmUpHandMenu : MonoBehaviour
 
     public void SetGameMode()
     {
-        MultiSelectionHandler.instance.ResetSelection();
-        CopyPasteHandler.instance.ResetSelection();
+        MultiDeleteHandler.instance.ResetSelection();
+        ExtrusionHandler.instance.ResetSelection();
 
         gameMode = (GameMode)gameModeRadialSet.GetComponent<InteractableToggleCollection>().CurrentIndex;
         switch (gameMode)
@@ -72,11 +72,11 @@ public class PalmUpHandMenu : MonoBehaviour
                 SetObjectManipulators(true);
                 buttonCursor.SetActive(false);
                 break;
-            case GameMode.MultiSelectMode:
+            case GameMode.MultiDeleteMode:
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(false);
                 break;
-            case GameMode.CopyPasteMode:
+            case GameMode.ExtrusionMode:
                 SetObjectManipulators(false);
                 buttonCursor.SetActive(true);
                 break;

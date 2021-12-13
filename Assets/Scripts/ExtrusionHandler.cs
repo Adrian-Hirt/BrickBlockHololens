@@ -4,9 +4,9 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
 
-public class CopyPasteHandler : MonoBehaviour
+public class ExtrusionHandler : MonoBehaviour
 {
-    public static CopyPasteHandler instance;
+    public static ExtrusionHandler instance;
     private HashSet<GridElement> selectedGridElements = new HashSet<GridElement>();
     private Material selectionMaterial;
 
@@ -49,7 +49,7 @@ public class CopyPasteHandler : MonoBehaviour
     private void Update()
     {
         // Do nothing if not in multi select mode
-        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.CopyPasteMode)
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.ExtrusionMode)
             return;
 
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Right, out MixedRealityPose poseRight))

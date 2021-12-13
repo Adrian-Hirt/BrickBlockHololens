@@ -4,9 +4,9 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
 
-public class MultiSelectionHandler : MonoBehaviour
+public class MultiDeleteHandler : MonoBehaviour
 {
-    public static MultiSelectionHandler instance;
+    public static MultiDeleteHandler instance;
     private List<GridElement> selectedGridElements = new List<GridElement>();
     private Material selectionMaterial;
 
@@ -49,7 +49,7 @@ public class MultiSelectionHandler : MonoBehaviour
     private void Update()
     {
         // Do nothing if not in multi select mode
-        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.MultiSelectMode)
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.MultiDeleteMode)
             return;
 
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Right, out MixedRealityPose poseRight))

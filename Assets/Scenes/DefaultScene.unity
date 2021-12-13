@@ -1560,7 +1560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0e581734fc82049bca4ca6d2cee3a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mesh: {fileID: 919132149155446097, guid: 9be0ca13bd037be43b2d3a5607e56200, type: 3}
+  mesh: {fileID: 919132149155446097, guid: 1ddde3d025db9e74d9f00cc7fb1668fd, type: 3}
 --- !u!4 &418669233
 Transform:
   m_ObjectHideFlags: 0

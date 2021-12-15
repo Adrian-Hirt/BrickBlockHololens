@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ using Microsoft.MixedReality.Toolkit.Input;
 
 public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
 {
+    private Vector3 dragStart;
+    
     protected override void RegisterHandlers()
     {
         CoreServices.InputSystem?.RegisterHandler<IMixedRealityPointerHandler>(this);
@@ -18,12 +21,46 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
 
     void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
     {
-        // Do nothing for now
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.ExtrusionMode)
+        {
+            return;
+        }
+        
+        // Get grid element we're currently pointing at
+        GridElement pointingAt = this.transform.parent.gameObject.GetComponent<CursorMovement>().pointingAt;
+        ShellHandRayPointer pointer = (ShellHandRayPointer) eventData.Pointer;
+
+        dragStart = pointer.transform.position;
     }
 
+    void IMixedRealityPointerHandler.OnPointerDragged(MixedRealityPointerEventData eventData)
+    {
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.ExtrusionMode)
+        {
+            return;
+        }
+        
+        // Get grid element we're currently pointing at
+        GridElement pointingAt = this.transform.parent.gameObject.GetComponent<CursorMovement>().pointingAt;
+        ShellHandRayPointer pointer = (ShellHandRayPointer) eventData.Pointer;
+        Vector3 dragDiff = (dragStart - pointer.transform.position).Mul(new Vector3(10, 10, 10));
+
+        ExtrusionHandler.instance.Drag(dragDiff);
+    }
+    
     void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData)
     {
-        // Do nothing for now
+        if (PalmUpHandMenu.instance.gameMode != PalmUpHandMenu.GameMode.ExtrusionMode)
+        {
+            return;
+        }
+        
+        ShellHandRayPointer pointer = (ShellHandRayPointer) eventData.Pointer;
+        Vector3 dragDiff = (dragStart - pointer.transform.position).Mul(new Vector3(10, 10, 10));
+        if (Math.Abs(dragDiff.x) >= 1 || Math.Abs(dragDiff.y) >= 1 || Math.Abs(dragDiff.z) >= 1)
+        {
+            ExtrusionHandler.instance.ResetSelection();
+        }
     }
 
     void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData)
@@ -31,7 +68,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
         bool deleteMode = false;
         switch (PalmUpHandMenu.instance.gameMode)
         {
-            case PalmUpHandMenu.GameMode.CopyPasteMode:
+            case PalmUpHandMenu.GameMode.ExtrusionMode:
             case PalmUpHandMenu.GameMode.PointerMode:
                 if (PalmUpHandMenu.instance.editMode == PalmUpHandMenu.EditMode.LeftRightHand)
                 {
@@ -41,6 +78,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
                 {
                     deleteMode = PalmUpHandMenu.instance.editMode == PalmUpHandMenu.EditMode.Destroy;
                 }
+
                 break;
             default:
                 return;
@@ -51,21 +89,21 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
             // Get grid element we're currently pointing at
             GridElement pointingAt = this.transform.parent.gameObject.GetComponent<CursorMovement>().pointingAt;
 
-            if (PalmUpHandMenu.instance.gameMode == PalmUpHandMenu.GameMode.CopyPasteMode)
+            if (PalmUpHandMenu.instance.gameMode == PalmUpHandMenu.GameMode.ExtrusionMode)
             {
                 if (deleteMode)
                 {
-                    CopyPasteHandler.instance.DeselectGridElement(pointingAt);
+                    ExtrusionHandler.instance.DeselectGridElement(pointingAt);
                 }
                 else
                 {
-                    CopyPasteHandler.instance.SelectGridElement(pointingAt);
+                    ExtrusionHandler.instance.SelectGridElement(pointingAt);
                 }
 
                 eventData.Use();
                 return;
             }
-            
+
             if (deleteMode)
             {
                 pointingAt.SetDisabled();
@@ -113,10 +151,5 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
             }
             eventData.Use();
         }
-    }
-
-    void IMixedRealityPointerHandler.OnPointerDragged(MixedRealityPointerEventData eventData)
-    {
-        // Do nothing for now
     }
 }

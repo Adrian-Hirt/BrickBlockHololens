@@ -193,7 +193,7 @@ MonoBehaviour:
   releaseDistanceDelta: 0.006008482
   returnSpeed: 25
   releaseOnTouchEnd: 1
-  enforceFrontPush: 1
+  enforceFrontPush: 0
   TouchBegin:
     m_PersistentCalls:
       m_Calls:
@@ -1920,7 +1920,7 @@ MonoBehaviour:
   releaseDistanceDelta: 0.006
   returnSpeed: 25
   releaseOnTouchEnd: 1
-  enforceFrontPush: 1
+  enforceFrontPush: 0
   TouchBegin:
     m_PersistentCalls:
       m_Calls:
@@ -3302,7 +3302,7 @@ MonoBehaviour:
   releaseDistanceDelta: 0.006
   returnSpeed: 25
   releaseOnTouchEnd: 1
-  enforceFrontPush: 1
+  enforceFrontPush: 0
   TouchBegin:
     m_PersistentCalls:
       m_Calls:
@@ -4840,7 +4840,7 @@ MonoBehaviour:
   releaseDistanceDelta: 0.006
   returnSpeed: 25
   releaseOnTouchEnd: 1
-  enforceFrontPush: 1
+  enforceFrontPush: 0
   TouchBegin:
     m_PersistentCalls:
       m_Calls:
@@ -6460,7 +6460,7 @@ MonoBehaviour:
   releaseDistanceDelta: 0.006
   returnSpeed: 25
   releaseOnTouchEnd: 1
-  enforceFrontPush: 1
+  enforceFrontPush: 0
   TouchBegin:
     m_PersistentCalls:
       m_Calls:
@@ -8031,7 +8031,7 @@ MonoBehaviour:
   releaseDistanceDelta: 0.006
   returnSpeed: 25
   releaseOnTouchEnd: 1
-  enforceFrontPush: 1
+  enforceFrontPush: 0
   TouchBegin:
     m_PersistentCalls:
       m_Calls:

@@ -5,7 +5,8 @@ using UnityEngine;
 public class CornerMeshes : MonoBehaviour
 {
     public static CornerMeshes instance;
-    private Dictionary<string, Mesh> meshes;
+    private Dictionary<string, Mesh> defaultMeshes;
+    private Dictionary<string, Mesh> simpleMeshes;
     public GameObject defaultMesh;
     public GameObject simpleMesh;
     
@@ -14,13 +15,14 @@ public class CornerMeshes : MonoBehaviour
         Default,
         Simple
     }
-    private MeshTypes currMesh;
+    private MeshTypes currMeshType;
 
     void Awake()
     {
         instance = this;
-        meshes = new Dictionary<string, Mesh>();
-        currMesh = MeshTypes.Default;
+        defaultMeshes = new Dictionary<string, Mesh>();
+        simpleMeshes  = new Dictionary<string, Mesh>();
+        currMeshType = MeshTypes.Default;
         Initialize();
     }
 
@@ -28,11 +30,29 @@ public class CornerMeshes : MonoBehaviour
     {
         foreach (Transform child in defaultMesh.transform)
         {
-            meshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
+            defaultMeshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
+        }
+        
+        foreach (Transform child in simpleMesh.transform)
+        {
+            simpleMeshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
         }
     }
 
     public Mesh GetCornerMesh(int bitmask, int level)
+    {
+        switch (currMeshType)
+        {
+            case MeshTypes.Default:
+                return getCornerMesh(bitmask, level, defaultMeshes);
+            case MeshTypes.Simple:
+                return getCornerMesh(bitmask, level, simpleMeshes);
+            default:
+                return null;
+        }
+    }
+
+    private Mesh getCornerMesh(int bitmask, int level, Dictionary<string, Mesh> meshes)
     {
         Mesh res;
         if (level > 1)
@@ -71,24 +91,11 @@ public class CornerMeshes : MonoBehaviour
 
     public void UpdateMesh()
     {
-        meshes.Clear();
+        currMeshType = (currMeshType == MeshTypes.Default) ? MeshTypes.Simple : MeshTypes.Default;
 
-        switch (currMesh)
+        foreach (KeyValuePair<string, CornerElement> entry in LevelGenerator.instance.cornerElementsDict)
         {
-            case MeshTypes.Default:
-                foreach (Transform child in simpleMesh.transform)
-                {
-                    meshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
-                }
-                currMesh = MeshTypes.Simple;
-                break;
-            case MeshTypes.Simple:
-                foreach (Transform child in defaultMesh.transform)
-                {
-                    meshes.Add(child.name, child.GetComponent<MeshFilter>().sharedMesh);
-                }
-                currMesh = MeshTypes.Default;
-                break;
+            entry.Value.SetCornerElement();
         }
     }
 }

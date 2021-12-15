@@ -22,7 +22,7 @@ public class LevelGenerator : MonoBehaviour
     public static float scaleFactor = 0.1f;
 
     private Dictionary<string, GridElement> gridElements;
-    private Dictionary<string, CornerElement> cornerElementsDict;
+    public Dictionary<string, CornerElement> cornerElementsDict;
 
     private float floorHeight = 0.25f, basementHeight;
     private void Awake()

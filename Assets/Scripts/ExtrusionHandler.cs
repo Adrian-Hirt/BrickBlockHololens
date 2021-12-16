@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
+using UnityEditor;
 using UnityEngine;
 
 public class ExtrusionHandler : MonoBehaviour
@@ -9,13 +11,15 @@ public class ExtrusionHandler : MonoBehaviour
     public static ExtrusionHandler instance;
     private HashSet<GridElement> selectedGridElements = new HashSet<GridElement>();
     private Material selectionMaterial;
+    private Boolean isGrabbing = true;
+    private Vector3 dragStart;
 
     private void Start()
     {
         selectionMaterial = Resources.Load<Material>("Selected_Copy");
         instance = this;
     }
-    
+
     private void HandlePoseUpdate(MixedRealityPose pose, Handedness handedness)
     {
         Collider[] hitColliders = Physics.OverlapSphere(pose.Position, 0f);
@@ -44,8 +48,33 @@ public class ExtrusionHandler : MonoBehaviour
                 }
             }
         }
+
+        if (isGrabbing)
+        {
+            Vector3 dragDiff = (dragStart - pose.Position).Mul(new Vector3(10, 10, 10));
+            Drag(dragDiff);
+        }
+
+        Boolean currentlyGrabbing = HandPoseUtils.IsIndexGrabbing(Handedness.Any) ||
+                                    HandPoseUtils.IsMiddleGrabbing(Handedness.Any) ||
+                                    HandPoseUtils.IsThumbGrabbing(Handedness.Any);
+        if (!isGrabbing && currentlyGrabbing)
+        {
+            isGrabbing = true;
+            dragStart = pose.Position;
+        }
+        else if (isGrabbing && !currentlyGrabbing)
+        {
+            isGrabbing = false;
+
+            Vector3 dragDiff = (dragStart - pose.Position).Mul(new Vector3(10, 10, 10));
+            if (Math.Abs(dragDiff.x) >= 1 || Math.Abs(dragDiff.y) >= 1 || Math.Abs(dragDiff.z) >= 1)
+            {
+                ResetSelection();
+            }
+        }
     }
-    
+
     private void Update()
     {
         // Do nothing if not in multi select mode
@@ -71,7 +100,7 @@ public class ExtrusionHandler : MonoBehaviour
 
         selectedGridElements.Add(element);
     }
-    
+
     public void ResetSelection()
     {
         foreach (GridElement gridElement in selectedGridElements)
@@ -95,10 +124,10 @@ public class ExtrusionHandler : MonoBehaviour
         {
             return;
         }
-        
-        int dragX = (Int32) dragDiff.x;
-        int dragY = (Int32) dragDiff.y;
-        int dragZ = (Int32) dragDiff.z;
+
+        int dragX = (Int32)dragDiff.x;
+        int dragY = (Int32)dragDiff.y;
+        int dragZ = (Int32)dragDiff.z;
 
         if (dragX == 0 && dragY == 0 && dragZ == 0)
         {
@@ -109,21 +138,24 @@ public class ExtrusionHandler : MonoBehaviour
         {
             foreach (GridElement gridElement in selectedGridElements)
             {
-                LevelGenerator.instance.GetGridElement(gridElement.GetCoord().x - dragX, gridElement.GetCoord().y, gridElement.GetCoord().z)?.SetTapEnabled();
+                LevelGenerator.instance.GetGridElement(gridElement.GetCoord().x - dragX, gridElement.GetCoord().y,
+                    gridElement.GetCoord().z)?.SetTapEnabled();
             }
         }
         else if (Math.Abs(dragY) >= Math.Abs(dragX) && Math.Abs(dragY) >= Math.Abs(dragZ))
         {
             foreach (GridElement gridElement in selectedGridElements)
             {
-                LevelGenerator.instance.GetGridElement(gridElement.GetCoord().x, gridElement.GetCoord().y - dragY, gridElement.GetCoord().z)?.SetTapEnabled();
+                LevelGenerator.instance.GetGridElement(gridElement.GetCoord().x, gridElement.GetCoord().y - dragY,
+                    gridElement.GetCoord().z)?.SetTapEnabled();
             }
         }
         else if (Math.Abs(dragZ) >= Math.Abs(dragX) && Math.Abs(dragZ) >= Math.Abs(dragY))
         {
             foreach (GridElement gridElement in selectedGridElements)
             {
-                LevelGenerator.instance.GetGridElement(gridElement.GetCoord().x, gridElement.GetCoord().y, gridElement.GetCoord().z - dragZ)?.SetTapEnabled();
+                LevelGenerator.instance.GetGridElement(gridElement.GetCoord().x, gridElement.GetCoord().y,
+                    gridElement.GetCoord().z - dragZ)?.SetTapEnabled();
             }
         }
     }

@@ -30,7 +30,7 @@ public class GridElement : MonoBehaviour
         this.col = this.GetComponent<Collider>();
         this.rend = this.GetComponent<Renderer>();
         this.elementHeight = setElementHeight;
-        this.transform.localScale = new Vector3(1.0f, elementHeight, 1.0f);
+        this.transform.localScale = new Vector3(1.001f, elementHeight + 0.001f, 1.001f);
         this.isGroundElement = setY == 0;
         //setting corners
 

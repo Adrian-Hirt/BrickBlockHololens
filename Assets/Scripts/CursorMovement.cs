@@ -10,19 +10,19 @@ public class CursorMovement : MonoBehaviour
 {
     public GridElement pointingAt;
     private Boolean visible = true;
-    
+
     private void Show()
     {
         if (visible)
         {
             return;
         }
-        
+
         foreach (Transform child in transform)
         {
             child.gameObject.SetActive(true);
         }
-        
+
         visible = true;
     }
 
@@ -32,7 +32,7 @@ public class CursorMovement : MonoBehaviour
         {
             return;
         }
-        
+
         foreach (Transform child in transform)
         {
             child.gameObject.SetActive(false);
@@ -40,11 +40,11 @@ public class CursorMovement : MonoBehaviour
 
         visible = false;
     }
-    
+
     void Update()
     {
         ShellHandRayPointer pointer = PointerUtils.GetPointer<ShellHandRayPointer>(Handedness.Any);
-        
+
         if (pointer != null && pointer.Result != null && pointer.Result.CurrentPointerTarget != null && pointer.Result.CurrentPointerTarget.CompareTag("gridElement"))
         {
             Show();
@@ -56,11 +56,11 @@ public class CursorMovement : MonoBehaviour
             }
 
             Transform elementTransform = currentElement.transform;
-            
+
             pointingAt = currentElement;
             transform.localPosition = elementTransform.localPosition;
-            transform.localScale = elementTransform.localScale;
-            
+            transform.localScale = elementTransform.localScale + new Vector3(0.001f, 0.001f, 0.001f);
+
             return;
         }
 

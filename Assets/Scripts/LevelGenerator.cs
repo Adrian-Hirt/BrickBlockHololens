@@ -389,13 +389,12 @@ public class LevelGenerator : MonoBehaviour
     private void CreateAndSetGridElement(int x, int y, int z, float elementHeight)
     {
         GridElement gridElementInstance = Instantiate(gridElement, this.transform, false);
-        
         Single trueY = y;
         if (y == 1)
         {
             trueY = 1 - ((basementHeight - 1) / 2);
         }
-        
+
         gridElementInstance.transform.localPosition = new Vector3(x, trueY, z);
 
         gridElementInstance.GetComponent<ObjectManipulator>().HostTransform = this.transform.parent.transform;

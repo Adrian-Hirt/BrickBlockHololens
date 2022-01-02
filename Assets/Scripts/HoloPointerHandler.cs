@@ -45,6 +45,10 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
         ShellHandRayPointer pointer = (ShellHandRayPointer) eventData.Pointer;
         Vector3 dragDiff = (dragStart - pointer.transform.position).Mul(new Vector3(10, 10, 10));
 
+        // Rotate by level rotation
+        dragDiff = Quaternion.Inverse(LevelGenerator.instance.transform.parent.gameObject.transform.rotation) *
+                   dragDiff;
+        
         ExtrusionHandler.instance.Drag(dragDiff);
     }
     

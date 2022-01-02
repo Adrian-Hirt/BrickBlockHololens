@@ -13,6 +13,7 @@ public class ExtrusionHandler : MonoBehaviour
     private Material selectionMaterial;
     private Boolean isGrabbing = true;
     private Vector3 dragStart;
+    private Handedness grabbingHand = Handedness.None;
 
     private void Start()
     {
@@ -49,23 +50,39 @@ public class ExtrusionHandler : MonoBehaviour
             }
         }
 
-        if (isGrabbing)
+        if (selectedGridElements.Count <= 0)
+        {
+            return;
+        }
+        
+        if (isGrabbing && handedness == grabbingHand)
         {
             Vector3 dragDiff = (dragStart - pose.Position).Mul(new Vector3(10, 10, 10));
+            
+            // Rotate by level rotation
+            dragDiff = Quaternion.Inverse(gameObject.transform.rotation) * dragDiff;
+            
             Drag(dragDiff);
         }
 
-        Boolean currentlyGrabbing = HandPoseUtils.IsIndexGrabbing(Handedness.Any) ||
-                                    HandPoseUtils.IsMiddleGrabbing(Handedness.Any) ||
-                                    HandPoseUtils.IsThumbGrabbing(Handedness.Any);
-        if (!isGrabbing && currentlyGrabbing)
+        Boolean leftGrabbing = HandPoseUtils.IsIndexGrabbing(Handedness.Left) ||
+                                    HandPoseUtils.IsMiddleGrabbing(Handedness.Left) ||
+                                    HandPoseUtils.IsThumbGrabbing(Handedness.Left);
+        
+        Boolean rightGrabbing = HandPoseUtils.IsIndexGrabbing(Handedness.Right) ||
+                                    HandPoseUtils.IsMiddleGrabbing(Handedness.Right) ||
+                                    HandPoseUtils.IsThumbGrabbing(Handedness.Right);
+
+        if (!isGrabbing && (leftGrabbing || rightGrabbing))
         {
             isGrabbing = true;
             dragStart = pose.Position;
+            grabbingHand = handedness;
         }
-        else if (isGrabbing && !currentlyGrabbing)
+        else if (isGrabbing && (!leftGrabbing && grabbingHand == Handedness.Left || !rightGrabbing && grabbingHand == Handedness.Right))
         {
             isGrabbing = false;
+            grabbingHand = Handedness.None;
 
             Vector3 dragDiff = (dragStart - pose.Position).Mul(new Vector3(10, 10, 10));
             if (Math.Abs(dragDiff.x) >= 1 || Math.Abs(dragDiff.y) >= 1 || Math.Abs(dragDiff.z) >= 1)
@@ -116,6 +133,8 @@ public class ExtrusionHandler : MonoBehaviour
         Renderer rend = element.GetComponent<Renderer>();
         rend.enabled = false;
         rend.material = null;
+        
+        selectedGridElements.Remove(element);
     }
 
     public void Drag(Vector3 dragDiff)

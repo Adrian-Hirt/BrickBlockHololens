@@ -45,7 +45,7 @@ public class ExtrusionHandler : MonoBehaviour
                 }
                 else
                 {
-                    DeselectGridElement(gridElement);
+                    DeselectGridElement(gridElement, true);
                 }
             }
         }
@@ -122,19 +122,20 @@ public class ExtrusionHandler : MonoBehaviour
     {
         foreach (GridElement gridElement in selectedGridElements)
         {
-            DeselectGridElement(gridElement);
+            DeselectGridElement(gridElement, false);
         }
 
         selectedGridElements.Clear();
     }
 
-    public void DeselectGridElement(GridElement element)
+    public void DeselectGridElement(GridElement element, bool removeElement)
     {
         Renderer rend = element.GetComponent<Renderer>();
         rend.enabled = false;
         rend.material = null;
         
-        selectedGridElements.Remove(element);
+        if (removeElement)
+            selectedGridElements.Remove(element);
     }
 
     public void Drag(Vector3 dragDiff)

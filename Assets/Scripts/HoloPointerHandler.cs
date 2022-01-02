@@ -97,7 +97,7 @@ public class HoloPointerHandler : BaseInputHandler, IMixedRealityPointerHandler
             {
                 if (deleteMode)
                 {
-                    ExtrusionHandler.instance.DeselectGridElement(pointingAt);
+                    ExtrusionHandler.instance.DeselectGridElement(pointingAt, true);
                 }
                 else
                 {

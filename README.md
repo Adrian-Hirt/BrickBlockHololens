@@ -22,10 +22,17 @@ Open Unity Hub and add the project. Open the project and wait for Unity to load 
 
 Once Unity opens the project, you should see the configuration prompt for the MRTK:
 
+![MRTK configurator Step 1](mrtk_step_1.png)
+
 Click the button **Unity OpenXR plugin (recommended)** and wait for Unity to setup the project.
 
-Once Unity finishes, the next screen in the MRTK setup opens. Click on the **Show XR Plug-in Management Settings** button and make sure that in the tab with the windows logo, the following two checkboxes are activated:
+Once Unity finishes, the next screen in the MRTK setup opens:
 
+![MRTK configurator Step 2](mrtk_step_2.png)
+
+Click on the **Show XR Plug-in Management Settings** button and make sure that in the tab with the windows logo, the following two checkboxes are activated:
+
+![MRTK configurator Step 3](mrtk_step_3.png)
 
 If this is the case, you may close the MRTK configuration. Now we need to reconfigure the Unity Project for the hololens.
 
